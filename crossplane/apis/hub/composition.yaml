@@ -147,7 +147,7 @@ spec:
                     path: demo/clusters
                     targetRevision: HEAD
                   destination: 
-                    name: in-cluster
+                    name: hostcluster
                     namespace: default
         patches:
         - type: PatchSet
@@ -252,6 +252,27 @@ spec:
                             duration: 5s
                             factor: 2
                             maxDuration: 3m0s
+        patches:
+        - type: PatchSet
+          patchSetName: target-cluster
+      - name: argocd-hostcluster-secret
+        base:
+          apiVersion: kubernetes.crossplane.io/v1alpha1
+          kind: Object
+          spec:
+            forProvider:
+              manifest:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  labels:
+                    argocd.argoproj.io/secret-type: cluster
+                  name: hostcluster
+                  namespace: argocd
+                data:
+                  name: aG9zdGNsdXN0ZXI= # hostcluster
+                  server: aHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3Zj # https://kubernetes.default.svc
+                  config: eyJ0bHNDbGllbnRDb25maWciOnsiaW5zZWN1cmUiOmZhbHNlfX0= #'{"tlsClientConfig":{"insecure":false}}' 
         patches:
         - type: PatchSet
           patchSetName: target-cluster
