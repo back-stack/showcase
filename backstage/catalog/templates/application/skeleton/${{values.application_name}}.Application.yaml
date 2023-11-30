@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ${{ values.application_name }}
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: ${{ values.application_source }}
+    path: ${{ values.application_source_path }}
+    targetRevision: HEAD
+  destination: 
+    name: ${{ values.cluster_id }}
+    namespace: default

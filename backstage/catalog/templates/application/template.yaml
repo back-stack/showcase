@@ -1,0 +1,86 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: application
+  title: New Application Deployment
+  description: Deploy an application to a registered cluster
+  tags:
+    - argocd
+    - xks
+spec:
+  owner: infrastructure
+  type: component
+  parameters:
+    - title: Deployment Configuration Parameters
+      required:
+        - name
+        - application_source
+        - cluster_id
+      properties:
+        name:
+          title: Application Name
+          type: string
+          description: The name of the application to deploy
+        application_source:
+          title: Application Source
+          type: string
+          description: The source repository of the application to deploy
+        application_source_path:
+          title: Path
+          type: string
+          description: Path within the source repository where the application is found
+          default: /
+        cluster_id:
+          title: Cluster ID
+          type: string
+          description: ID of the Cluster to target for deployment
+          ui:field: EntityPicker
+          ui:options:
+            catalogFilter:
+              - kind: Resource
+                spec.type: kubernetes-cluster
+    - title: Destination
+      required:
+        - repo_url
+      properties:
+        repo_url:
+          title: Repository Location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+        pull_request_branch_name:
+          title: Branch name for Pull Request
+          type: string
+          default: new-application-request
+  steps:
+    - id: template-application
+      name: Fetch application claim template
+      action: fetch:template
+      input:
+        url: ./skeleton
+        targetPath: demo/applications
+        values:
+          cluster_id: ${{ parameters.cluster_id | parseEntityRef | pick('name') }}
+          application_name: ${{ parameters.name }}
+          application_source: ${{ parameters.application_source }}
+          application_source_path: ${{ parameters.application_source_path }}
+    - id: publish
+      name: Publish
+      action: publish:github:pull-request
+      input:
+        allowedHosts: ['github.com']
+        title: Request for new application deployment 
+        description: |
+          Application Source: ${{ parameters.application_source }}
+          Cluster ID: ${{ parameters.cluster_id }}
+        repoUrl: ${{ parameters.repo_url }} 
+        branchName: ${{ parameters.pull_request_branch_name }}
+  output:
+    text:
+      - title: Accept Pull Request
+        content: |
+          Your New Application Request has been published to GitHub
+
+           To finish deploying the application, review and accept the [pull request](${{ steps['publish'].output.remoteUrl }}) 

@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: templates
+  description: A collection of all templates
+spec:
+  targets:
+    - ./templates/cluster/eks/template.yaml
+    - ./templates/cluster/aks/template.yaml
+    - ./templates/application/template.yaml

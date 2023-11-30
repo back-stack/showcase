@@ -1,0 +1,21 @@
+apiVersion: backstack.cncf.io/v1alpha1
+kind: EKSCluster
+metadata:
+  name: ${{ values.cluster_id }}
+  namespace: default
+spec:
+  parameters:
+    id: ${{ values.cluster_id }}
+    region: ${{ values.region }}
+    iam:
+      roleArn: ${{ values.iam_role_arn}}
+    version: "${{ values.version }}"
+    nodes:
+      count: ${{ values.nodes_count }}
+      instanceType: ${{ values.nodes_instance_type }}
+  writeConnectionSecretToRef:
+    name: ${{ values.cluster_id }}-kubeconfig
+  publishConnectionDetailsTo:
+    name: ${{ values.cluster_id }}/${{ values.cluster_id }}-kubeconfig
+    configRef:
+      name: vault

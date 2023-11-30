@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Location
+metadata:
+  name: back-stack
+  description: The BACK stack entity locations
+spec:
+  targets:
+    - ./backstage/catalog/system.yaml
+    - ./backstage/catalog/components.yaml
+    - ./backstage/catalog/resources.yaml
+    - ./backstage/catalog/templates.yaml
