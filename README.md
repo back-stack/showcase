@@ -5,6 +5,8 @@ Introducing the BACK Stack
 
 ![architecture diagram](./imgs/arch.png)
 
+Watch the Kubecon session: [Introducing the BACK Stack!](https://youtu.be/SMlR12uwMLs)
+
 ## Prerequisites
 For a local install, you need kind installed and a bash-compatible shell.
 
