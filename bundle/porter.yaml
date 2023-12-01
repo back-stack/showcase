@@ -1,0 +1,97 @@
+schemaType: Bundle
+schemaVersion: 1.0.1
+name: back-stack
+version: 0.1.0
+description: "The BACK stack showcase bundle"
+
+dockerfile: template.Dockerfile
+registry: "localhost:5000"
+
+credentials:
+  - name: kubeconfig
+    path: /home/nonroot/.kube/config
+    required: false
+    applyTo:
+      - install
+
+parameters:
+  - name: use-kind
+    env: USE_KIND
+    type: boolean
+    default: true
+
+outputs:
+  - name: kubeconfig
+    type: file
+    path: /home/nonroot/.kube/config
+    applyTo:
+      - install
+
+mixins:
+  - exec
+  - docker
+  - kubernetes
+  - helm3:
+      repositories:
+        crossplane-stable:
+          url: https://charts.crossplane.io/stable
+
+required:
+  - docker
+
+# Define the steps that should execute when the bundle is installed
+install:
+  - exec:
+      description: "Ensure Kubernetes Connection"
+      command: ./helpers.sh
+      arguments:
+        - ensure_kubernetes
+  - exec:
+      description: "Install IngressController"
+      command: ./helpers.sh
+      arguments:
+        - configure_ingress
+  - helm3:
+      description: "Install Crossplane"
+      name: crossplane
+      chart: crossplane-stable/crossplane
+      namespace: crossplane-system
+      set:
+        args: '{--enable-external-secret-stores}'
+  - helm3:
+      description: "Install Crossplane Vault ESS Plugin"
+      name: ess-plugin-vault
+      chart: oci://xpkg.upbound.io/crossplane-contrib/ess-plugin-vault
+      namespace: crossplane-system
+      values:
+        - manifests/ess-plugin-vault.yaml
+  - exec:
+      description: "Wait for Crossplane Configuration CRD to be ready"
+      command: ./helpers.sh
+      arguments:
+        - waitfor
+        - default
+        - crd
+        - configurations.pkg.crossplane.io
+  - kubernetes:
+      description: "Install BACK stack Configuration"
+      manifests:
+        - manifests/back-stack.Configuration.yaml
+      wait: true
+
+
+# Define the steps that should execute when the bundle is upgraded
+upgrade:
+  - exec:
+      description: "World 2.0"
+      command: ./helpers.sh
+      arguments:
+        - upgrade
+
+# Define the steps that should execute when the bundle is uninstalled
+uninstall:
+  - exec:
+      description: "Uninstall Hello World"
+      command: ./helpers.sh
+      arguments:
+        - uninstall
