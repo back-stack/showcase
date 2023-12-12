@@ -8,6 +8,24 @@ dockerfile: template.Dockerfile
 registry: "localhost:5000"
 
 credentials:
+  # required
+  - name: github-token
+    env: GITHUB_TOKEN
+    applyTo:
+      - install
+  - name: vault-token
+    env: VAULT_TOKEN
+    applyTo:
+      - install
+  - name: azure-credentials
+    env: AZURE_CREDENTIALS
+    applyTo:
+      - install
+  - name: aws-credentials
+    env: AWS_CREDENTIALS
+    applyTo:
+      - install
+  # optional
   - name: kubeconfig
     path: /home/nonroot/.kube/config
     required: false
@@ -19,6 +37,22 @@ parameters:
     env: USE_KIND
     type: boolean
     default: true
+  - name: repository
+    env: REPOSITORY
+    type: string
+    default: https://github.com/back-stack/showcase
+  - name: backstage-host
+    env: BACKSTAGE_HOST
+    type: string
+    default: backstage-7f000001.nip.io
+  - name: argocd-host
+    env: ARGOCD_HOST
+    type: string
+    default: argocd-7f000001.nip.io
+  - name: vault-host
+    env: VAULT_HOST
+    type: string
+    default: vault-7f000001.nip.io
 
 outputs:
   - name: kubeconfig
@@ -32,12 +66,12 @@ mixins:
   - docker
   - kubernetes
   - helm3:
+      clientVersion: v3.13.2
       repositories:
         crossplane-stable:
           url: https://charts.crossplane.io/stable
-
-required:
-  - docker
+        ingress-nginx:
+          url: https://kubernetes.github.io/ingress-nginx
 
 # Define the steps that should execute when the bundle is installed
 install:
@@ -45,40 +79,7 @@ install:
       description: "Ensure Kubernetes Connection"
       command: ./helpers.sh
       arguments:
-        - ensure_kubernetes
-  - exec:
-      description: "Install IngressController"
-      command: ./helpers.sh
-      arguments:
-        - configure_ingress
-  - helm3:
-      description: "Install Crossplane"
-      name: crossplane
-      chart: crossplane-stable/crossplane
-      namespace: crossplane-system
-      set:
-        args: '{--enable-external-secret-stores}'
-  - helm3:
-      description: "Install Crossplane Vault ESS Plugin"
-      name: ess-plugin-vault
-      chart: oci://xpkg.upbound.io/crossplane-contrib/ess-plugin-vault
-      namespace: crossplane-system
-      values:
-        - manifests/ess-plugin-vault.yaml
-  - exec:
-      description: "Wait for Crossplane Configuration CRD to be ready"
-      command: ./helpers.sh
-      arguments:
-        - waitfor
-        - default
-        - crd
-        - configurations.pkg.crossplane.io
-  - kubernetes:
-      description: "Install BACK stack Configuration"
-      manifests:
-        - manifests/back-stack.Configuration.yaml
-      wait: true
-
+        - install
 
 # Define the steps that should execute when the bundle is upgraded
 upgrade:

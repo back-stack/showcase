@@ -45,3 +45,48 @@ EOF
 ```sh
 ./local-install.sh
 ```
+
+## Installing with porter
+You can also use [Porter][getporter] to perform the install
+
+### Steps
+1. Install porter [[link]][install-porter]
+1. Create a credentials file
+    ```yaml
+    schemaType: CredentialSet
+    schemaVersion: 1.0.1
+    name: back-stack
+    credentials:
+      - name: github-token
+        source:
+          value: <personal access token>
+      - name: vault-token
+        source:
+          value: root # this is the default for 'dev' mode
+      - name: azure-credentials
+        source:
+          path: ~/azure-credentials.json
+      - name: aws-credentials
+        source:
+          path: ~/.aws/credentials 
+      - name: kubeconfig # if installing into an existing kubernetes cluster
+        source:
+          path: ~/.kube/config 
+    ```
+1. Create a parameters file
+    ```yaml
+    schemaType: ParameterSet
+    schemaVersion: 1.0.1
+    name: back-stack
+    parameters:
+      - name: 
+    ```
+1. Install the BACK stack
+    ```shell
+    porter install back-stack --reference ghcr.io/back-stack/showcase-bundle:v0.5.0 --credential-set back-stack --parameter-set back-stack
+    ```
+
+
+
+[getporter]: https://getporter.org
+[install-porter]: https://getporter.org/docs/getting-started/install-porter/
