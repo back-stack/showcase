@@ -79,6 +79,7 @@ spec:
                     backstage.io/kubernetes-id: argocd-service
                   ingress:
                     enabled: true
+                    ingressClassName: nginx
                     annotations:
                       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
                       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
@@ -91,6 +92,7 @@ spec:
                       secretName: argocd-tls
                   ingressGrpc:
                     enabled: true
+                    ingressClassName: nginx
                     annotations:
                       nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
                       cert-manager.io/cluster-issuer: selfsigned-cluster-issuer 
@@ -292,6 +294,7 @@ spec:
               values:
                 ingress:
                   enabled: true
+                  className: nginx
                   annotations:  
                     cert-manager.io/cluster-issuer: selfsigned-cluster-issuer 
                   tls:
@@ -300,8 +303,8 @@ spec:
                 backstage: 
                   image: 
                     registry: ghcr.io
-                    repository: opendev-ie/back-stack-backstage
-                    tag: 1.0.0
+                    repository: back-stack/showcase-backstage
+                    tag: v0.5.0
                     pullPolicy: IfNotPresent
                   extraEnvVarsSecrets:
                   - backstage
@@ -365,6 +368,10 @@ spec:
           patchSetName: target-cluster
         - fromFieldPath: spec.parameters.backstage.host
           toFieldPath: spec.forProvider.values.ingress.host
+        - fromFieldPath: spec.parameters.backstage.image
+          toFieldPath: spec.forProvider.values.backstage.image
+          policy:
+            fromFieldPath: Optional
         - fromFieldPath: spec.parameters.backstage.host
           toFieldPath: spec.forProvider.values.backstage.appConfig.app.baseUrl
           transforms:
@@ -608,6 +615,7 @@ spec:
                     enabled: true
                   ingress:
                     enabled: true
+                    ingressClassName: nginx
                     annotations:
                       cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
                     hosts:
