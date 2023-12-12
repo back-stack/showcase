@@ -40,6 +40,10 @@ spec:
                       host:
                         type: string
                         description: Ingress URL for Backstage
+                      image:
+                        type: object
+                        description: Backstage image configuration
+                        x-kubernetes-preserve-unknown-fields: true
                   argocd:
                     type: object
                     description: Configuration for the ArgoCD deployment
