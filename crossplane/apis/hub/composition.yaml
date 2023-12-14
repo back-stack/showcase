@@ -304,7 +304,7 @@ spec:
                   image: 
                     registry: ghcr.io
                     repository: back-stack/showcase-backstage
-                    tag: v0.5.0
+                    tag: latest
                     pullPolicy: IfNotPresent
                   extraEnvVarsSecrets:
                   - backstage
