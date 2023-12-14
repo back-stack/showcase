@@ -1,0 +1,104 @@
+
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: {}
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+  CROSSPLANE_VERSION: v1.14.4
+
+jobs:
+  configuration:
+    runs-on: ubuntu-22.04
+    
+    permissions:
+      contents: read
+      packages: write
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Fetch Package Tag
+        run: echo "VERSION_TAG=$(git rev-parse --short=8 HEAD)" >> $GITHUB_OUTPUT
+        id: tag
+      
+      - name: Log into ${{ env.REGISTRY }}
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install crossplane CLI
+        run: |
+          curl -Lo /usr/local/bin/crossplane "https://releases.crossplane.io/stable/${{ env.CROSSPLANE_VERSION }}/bin/linux_amd64/crank" \
+          && chmod +x /usr/local/bin/crossplane
+      
+      - name: Build Configuration Package
+        run: |
+          crossplane xpkg build --package-root=crossplane/ -o crossplane/back-stack.xpkg
+      
+      - name: Push ${{ steps.tag.outputs.VERSION_TAG }} & latest
+        run: |
+          crossplane xpkg push -f crossplane/back-stack.xpkg ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-configuration:${{ steps.tag.outputs.VERSION_TAG }}
+          crossplane xpkg push -f crossplane/back-stack.xpkg ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-configuration:latest
+
+  backstage:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      packages: write
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set tag
+        run: echo "VERSION_TAG=$(git rev-parse --short=8 HEAD)" >> $GITHUB_OUTPUT
+        id: tag
+
+      - name: Set Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+      
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run yarn install
+        uses: borales/actions-yarn@v4
+        with:
+          dir: backstage
+          cmd: install
+
+      - name: Build backend bundle
+        uses: borales/actions-yarn@v4
+        with:
+          dir: backstage
+          cmd: build:backend
+      
+      - name: Build the image
+        uses: borales/actions-yarn@v4
+        with:
+          dir: backstage
+          cmd: build-image --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backstage:${{ steps.tag.outputs.VERSION_TAG }} --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backstage:latest
+
+      # Use docker push command directly to work with docker login action.
+      - name: Push the image
+        run: |
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backstage:${{ steps.tag.outputs.VERSION_TAG }}
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backstage:latest
