@@ -3,7 +3,7 @@
 Introducing the BACK Stack
 
 
-![architecture diagram](./imgs/arch.png)
+![architecture diagram](./imgs/arch.svg)
 
 Watch the Kubecon session: [Introducing the BACK Stack!](https://youtu.be/SMlR12uwMLs)
 
