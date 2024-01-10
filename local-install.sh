@@ -31,7 +31,7 @@ kind create cluster --name backstack --wait 5m --config=- <<- EOF
       kind: InitConfiguration
       nodeRegistration:
         kubeletExtraArgs:
-          node-labels: "ingress-ready=true"        
+          node-labels: "ingress-ready=true"
     extraPortMappings:
     - containerPort: 80
       hostPort: 80
@@ -42,8 +42,8 @@ kind create cluster --name backstack --wait 5m --config=- <<- EOF
 EOF
 
 # configure ingress
-kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.1/deploy/static/provider/kind/deploy.yaml
-kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=90s 
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/controller-v1.8.2/deploy/static/provider/kind/deploy.yaml
+kubectl wait --namespace ingress-nginx --for=condition=ready pod --selector=app.kubernetes.io/component=controller --timeout=90s
 
 # install crossplane
 helm repo add crossplane-stable https://charts.crossplane.io/stable
@@ -109,7 +109,7 @@ kubectl create -f - <<- EOF
         secretRef:
           namespace: crossplane-system
           name: azure-secret
-          key: credentials    
+          key: credentials
 EOF
 
 # configure provider-aws for crossplane
@@ -133,14 +133,14 @@ EOF
 loadenv ./.env
 
 # deploy hub
-waitfor default crd hubs.backstack.cncf.io
-kubectl wait crd/hubs.backstack.cncf.io --for=condition=Established --timeout=1m
+waitfor default crd hubs.backstack.dev
+kubectl wait crd/hubs.backstack.dev --for=condition=Established --timeout=1m
 kubectl apply -f - <<-EOF
-    apiVersion: backstack.cncf.io/v1alpha1
+    apiVersion: backstack.dev/v1alpha1
     kind: Hub
     metadata:
       name: hub
-    spec: 
+    spec:
       parameters:
         clusterId: local
         repository: ${REPOSITORY}
@@ -232,7 +232,7 @@ kubectl -n vault exec -i vault-0 -- vault write auth/kubernetes/role/crossplane 
     ttl=24h
 
 # restart ess pod
-kubectl get -n crossplane-system pods -o name | grep ess-plugin-vault | xargs kubectl delete -n crossplane-system 
+kubectl get -n crossplane-system pods -o name | grep ess-plugin-vault | xargs kubectl delete -n crossplane-system
 
 # ready to go!
 echo ""
@@ -240,6 +240,7 @@ echo "
 Your BACK Stack is ready!
 
 Backstage: https://backstage-7f000001.nip.io
+Vault: https://vault-7f000001.nip.io
 ArgoCD: https://argocd-7f000001.nip.io
   username: admin
   password ${ARGO_INITIAL_PASSWORD}

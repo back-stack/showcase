@@ -1,10 +1,10 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: default-xhub.backstack.cncf.io
+  name: default-xhub.backstack.dev
 spec:
   compositeTypeRef:
-    apiVersion: backstack.cncf.io/v1alpha1
+    apiVersion: backstack.dev/v1alpha1
     kind: XHub
   mode: Pipeline
   pipeline:
@@ -24,7 +24,7 @@ spec:
         base:
           apiVersion: helm.crossplane.io/v1beta1
           kind: Release
-          metadata: 
+          metadata:
             annotations:
               crossplane.io/external-name: cert-manager
           spec:
@@ -83,11 +83,11 @@ spec:
                     annotations:
                       nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
                       nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-                      cert-manager.io/cluster-issuer: selfsigned-cluster-issuer 
-                    hosts: 
+                      cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
+                    hosts:
                     - hostname # patched
                     tls:
-                    - hosts: 
+                    - hosts:
                       - hostname # patched
                       secretName: argocd-tls
                   ingressGrpc:
@@ -95,11 +95,11 @@ spec:
                     ingressClassName: nginx
                     annotations:
                       nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
-                      cert-manager.io/cluster-issuer: selfsigned-cluster-issuer 
-                    hosts: 
+                      cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
+                    hosts:
                     - grpc.hostname # patched
                     tls:
-                    - hosts: 
+                    - hosts:
                       - grpc.hostname # patched
                       secretName: argocd-grpc-tls
         patches:
@@ -123,20 +123,20 @@ spec:
             string:
               type: Format
               fmt: "grpc.%s"
-        - fromFieldPath: metadata.name 
+        - fromFieldPath: metadata.name
           toFieldPath: metadata.name
           transforms:
           - type: string
-            string: 
+            string:
               type: Format
               fmt: "%s-argocd"
       - name: argocd-clusters-application
-        base: 
+        base:
           apiVersion: kubernetes.crossplane.io/v1alpha1
           kind: Object
-          spec: 
-            forProvider:  
-              manifest: 
+          spec:
+            forProvider:
+              manifest:
                 apiVersion: argoproj.io/v1alpha1
                 kind: Application
                 metadata:
@@ -148,7 +148,7 @@ spec:
                     repoURL: repository # patched
                     path: demo/clusters
                     targetRevision: HEAD
-                  destination: 
+                  destination:
                     name: hostcluster
                     namespace: default
         patches:
@@ -157,12 +157,12 @@ spec:
         - fromFieldPath: spec.parameters.repository
           toFieldPath: spec.forProvider.manifest.spec.source.repoURL
       - name: argocd-kyverno-applicationset
-        base: 
+        base:
           apiVersion: kubernetes.crossplane.io/v1alpha1
           kind: Object
-          spec: 
-            forProvider:  
-              manifest: 
+          spec:
+            forProvider:
+              manifest:
                 apiVersion: argoproj.io/v1alpha1
                 kind: ApplicationSet
                 metadata:
@@ -173,8 +173,8 @@ spec:
                   - clusters:
                       selector:
                         matchLabels:
-                          clusterType: spoke        
-                  template: 
+                          clusterType: spoke
+                  template:
                     metadata:
                       name: '{{name}}-kyverno'
                       annotations:
@@ -183,7 +183,7 @@ spec:
                       project: "default"
                       source:
                         repoURL: https://github.com/kyverno/kyverno
-                        targetRevision: release-1.10
+                        targetRevision: release-1.11
                         path: charts/kyverno
                         helm:
                           releaseName: "{{name}}-kyverno"
@@ -197,7 +197,7 @@ spec:
                         - Replace=true
                         - CreateNamespace=true
                         automated:
-                          selfHeal: true  
+                          selfHeal: true
                         retry:
                           limit: 30
                           backoff:
@@ -208,12 +208,12 @@ spec:
         - type: PatchSet
           patchSetName: target-cluster
       - name: argocd-kyverno-policies-applicationset
-        base: 
+        base:
           apiVersion: kubernetes.crossplane.io/v1alpha1
           kind: Object
-          spec: 
-            forProvider:  
-              manifest: 
+          spec:
+            forProvider:
+              manifest:
                 apiVersion: argoproj.io/v1alpha1
                 kind: ApplicationSet
                 metadata:
@@ -224,8 +224,8 @@ spec:
                   - clusters:
                       selector:
                         matchLabels:
-                          clusterType: spoke        
-                  template: 
+                          clusterType: spoke
+                  template:
                     metadata:
                       name: '{{name}}-kyverno-policies'
                       annotations:
@@ -234,7 +234,7 @@ spec:
                       project: "default"
                       source:
                         repoURL: https://github.com/kyverno/kyverno
-                        targetRevision: release-1.10
+                        targetRevision: release-1.11
                         path: charts/kyverno-policies
                         helm:
                           releaseName: "{{name}}-kyverno-policies"
@@ -247,7 +247,7 @@ spec:
                         syncOptions:
                         - Replace=true
                         automated:
-                          selfHeal: true  
+                          selfHeal: true
                         retry:
                           limit: 30
                           backoff:
@@ -274,7 +274,7 @@ spec:
                 data:
                   name: aG9zdGNsdXN0ZXI= # hostcluster
                   server: aHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3Zj # https://kubernetes.default.svc
-                  config: eyJ0bHNDbGllbnRDb25maWciOnsiaW5zZWN1cmUiOmZhbHNlfX0= #'{"tlsClientConfig":{"insecure":false}}' 
+                  config: eyJ0bHNDbGllbnRDb25maWciOnsiaW5zZWN1cmUiOmZhbHNlfX0= #'{"tlsClientConfig":{"insecure":false}}'
         patches:
         - type: PatchSet
           patchSetName: target-cluster
@@ -295,13 +295,13 @@ spec:
                 ingress:
                   enabled: true
                   className: nginx
-                  annotations:  
-                    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer 
+                  annotations:
+                    cert-manager.io/cluster-issuer: selfsigned-cluster-issuer
                   tls:
                     enabled: true
                     secretName: backstage-tls
-                backstage: 
-                  image: 
+                backstage:
+                  image:
                     registry: ghcr.io
                     repository: back-stack/showcase-backstage
                     tag: latest
@@ -329,7 +329,7 @@ spec:
                       github:
                         - host: github.com
                           token: ${GITHUB_TOKEN}
-                    proxy: 
+                    proxy:
                     techdocs:
                       builder: 'local' # Alternatives - 'external'
                       generator:
@@ -400,11 +400,11 @@ spec:
             string:
               type: Format
               fmt: "https://%s"
-        - fromFieldPath: metadata.name 
+        - fromFieldPath: metadata.name
           toFieldPath: metadata.name
           transforms:
           - type: string
-            string: 
+            string:
               type: Format
               fmt: "%s-backstage"
       - name: backstage-kubernetes-read-only-role
@@ -453,7 +453,7 @@ spec:
                       - get
                       - list
                   - apiGroups:
-                      - backstack.cncf.io
+                      - backstack.dev
                     resources:
                       - '*'
                     verbs:
@@ -501,20 +501,20 @@ spec:
         patches:
         - type: PatchSet
           patchSetName: target-cluster
-        - fromFieldPath: metadata.name 
+        - fromFieldPath: metadata.name
           toFieldPath: metadata.name
           transforms:
           - type: string
-            string: 
+            string:
               type: Format
               fmt: "%s-kyverno"
       - name: kyverno-argocd-cluster-generation-clusterpolicy
         base:
           apiVersion: kubernetes.crossplane.io/v1alpha1
           kind: Object
-          spec: 
-            forProvider: 
-              manifest: 
+          spec:
+            forProvider:
+              manifest:
                 apiVersion: kyverno.io/v1
                 kind: ClusterPolicy
                 metadata:
@@ -631,20 +631,20 @@ spec:
           toFieldPath: spec.forProvider.values.server.ingress.hosts[0].host
         - fromFieldPath: spec.parameters.vault.host
           toFieldPath: spec.forProvider.values.server.ingress.tls[0].hosts[0]
-        - fromFieldPath: metadata.name 
+        - fromFieldPath: metadata.name
           toFieldPath: metadata.name
           transforms:
           - type: string
-            string: 
+            string:
               type: Format
               fmt: "%s-vault"
       - name: crossplane-vaultconfig
         base:
           apiVersion: kubernetes.crossplane.io/v1alpha1
           kind: Object
-          spec: 
-            forProvider:  
-              manifest: 
+          spec:
+            forProvider:
+              manifest:
                 apiVersion: secrets.crossplane.io/v1alpha1
                 kind: VaultConfig
                 metadata:
@@ -666,9 +666,9 @@ spec:
         base:
           apiVersion: kubernetes.crossplane.io/v1alpha1
           kind: Object
-          spec: 
-            forProvider:  
-              manifest: 
+          spec:
+            forProvider:
+              manifest:
                 apiVersion: secrets.crossplane.io/v1alpha1
                 kind: StoreConfig
                 metadata:

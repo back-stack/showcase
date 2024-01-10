@@ -1,14 +1,14 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: xnetworks.azure.backstack.cncf.io
+  name: xnetworks.azure.backstack.dev
   labels:
     provider: azure
     type: basic
 spec:
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
-    apiVersion: azure.backstack.cncf.io/v1alpha1
+    apiVersion: azure.backstack.dev/v1alpha1
     kind: XNetwork
   patchSets:
   - name: network-id

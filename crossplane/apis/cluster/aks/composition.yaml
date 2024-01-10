@@ -1,18 +1,18 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: xaksclusters.backstack.cncf.io
+  name: xaksclusters.backstack.dev
 spec:
   writeConnectionSecretsToNamespace: crossplane-system
-  publishConnectionDetailsWithStoreConfigRef: 
+  publishConnectionDetailsWithStoreConfigRef:
     name: vault
   compositeTypeRef:
-    apiVersion: backstack.cncf.io/v1alpha1
+    apiVersion: backstack.dev/v1alpha1
     kind: XAKSCluster
   resources:
     - name: network
       base:
-        apiVersion: azure.backstack.cncf.io/v1alpha1
+        apiVersion: azure.backstack.dev/v1alpha1
         kind: XNetwork
       patches:
         - fromFieldPath: spec.parameters.id
@@ -23,7 +23,7 @@ spec:
           toFieldPath: spec.compositionSelector.matchLabels[type]
     - name: cluster
       base:
-        apiVersion: azure.backstack.cncf.io/v1alpha1
+        apiVersion: azure.backstack.dev/v1alpha1
         kind: XAKS
       connectionDetails:
         - fromConnectionSecretKey: kubeconfig

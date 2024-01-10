@@ -1,13 +1,13 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: xeksclusters.backstack.cncf.io
+  name: xeksclusters.backstack.dev
 spec:
   writeConnectionSecretsToNamespace: crossplane-system
-  publishConnectionDetailsWithStoreConfigRef: 
+  publishConnectionDetailsWithStoreConfigRef:
     name: vault
   compositeTypeRef:
-    apiVersion: backstack.cncf.io/v1alpha1
+    apiVersion: backstack.dev/v1alpha1
     kind: XEKSCluster
   resources:
     - base:

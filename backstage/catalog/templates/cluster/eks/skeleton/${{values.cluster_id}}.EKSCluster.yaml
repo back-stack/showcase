@@ -1,4 +1,4 @@
-apiVersion: backstack.cncf.io/v1alpha1
+apiVersion: backstack.dev/v1alpha1
 kind: EKSCluster
 metadata:
   name: ${{ values.cluster_id }}

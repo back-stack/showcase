@@ -1,9 +1,9 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: CompositeResourceDefinition
 metadata:
-  name: xaks.azure.backstack.cncf.io
+  name: xaks.azure.backstack.dev
 spec:
-  group: azure.backstack.cncf.io
+  group: azure.backstack.dev
   names:
     kind: XAKS
     plural: xaks
