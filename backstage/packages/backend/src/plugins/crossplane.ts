@@ -57,9 +57,9 @@ export class CrossplaneProvider implements EntityProvider {
     }
 
     if (url.pathname === '/') {
-      url.pathname = `/apis/backstack.cncf.io/v1alpha1/namespaces/default/${clusterType}`;
+      url.pathname = `/apis/backstack.dev/v1alpha1/namespaces/default/${clusterType}`;
     } else {
-      url.pathname += `/apis/backstack.cncf.io/v1alpha1/namespaces/default/${clusterType}`;
+      url.pathname += `/apis/backstack.dev/v1alpha1/namespaces/default/${clusterType}`;
     }
 
     const clusters: {kind: any, items: any} =  await fetch(url, requestInit).then(res => res.json());
@@ -75,7 +75,7 @@ export class CrossplaneProvider implements EntityProvider {
 
     const aksclusters = await this.getClusters("aksclusters");
     const eksclusters = await this.getClusters("eksclusters");
-    
+
     const entities: Entity[] = aksclusters.concat(eksclusters).map((item: any): Entity => ({
         apiVersion: "backstage.io/v1alpha1",
         kind: "Resource",

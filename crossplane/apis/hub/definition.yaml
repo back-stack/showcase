@@ -1,9 +1,9 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: CompositeResourceDefinition
 metadata:
-  name: xhubs.backstack.cncf.io
+  name: xhubs.backstack.dev
 spec:
-  group: backstack.cncf.io
+  group: backstack.dev
   names:
     kind: XHub
     plural: xhubs
@@ -22,7 +22,7 @@ spec:
           spec:
             type: object
             description: Specification of the desired state of the Hub
-            properties: 
+            properties:
               parameters:
                 type: object
                 description: Input parameters for provisioning a Hub
@@ -32,7 +32,7 @@ spec:
                     description: ID of the target cluster for the BACK stack. There should be helm and kubernetes ProviderConfigs of the same name present in the control plane.
                   repository:
                     type: string
-                    description: The URL of the git repository where claims will be synchronized 
+                    description: The URL of the git repository where claims will be synchronized
                   backstage:
                     type: object
                     description: Configuration for the Backstage deployment
@@ -48,17 +48,16 @@ spec:
                     type: object
                     description: Configuration for the ArgoCD deployment
                     properties:
-                      host: 
+                      host:
                         type: string
                         description: Ingress URL for ArgoCD
                   vault:
                     type: object
                     description: Configuration for the Vault deployment
                     properties:
-                      host: 
+                      host:
                         type: string
                         description: Ingress URL for Vault
           status:
             type: object
             description: Observed status of the Hub
-                                  

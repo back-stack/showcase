@@ -1,13 +1,13 @@
 apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
-  name: xaks.azure.backstack.cncf.io
+  name: xaks.azure.backstack.dev
   labels:
     provider: azure
 spec:
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
-    apiVersion: azure.backstack.cncf.io/v1alpha1
+    apiVersion: azure.backstack.dev/v1alpha1
     kind: XAKS
   patchSets:
   - name: region

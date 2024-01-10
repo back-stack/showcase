@@ -3,8 +3,8 @@ kind: Configuration
 metadata:
   name: backstack
   annotations:
-    meta.crossplane.io/maintainer: Murph <murph@opusdavei.org>
-    meta.crossplane.io/source: github.com/opendev-ie/back-stack
+    meta.crossplane.io/maintainer: Back Stack <https://github.com/back-stack>
+    meta.crossplane.io/source: github.com/back-stack
     meta.crossplane.io/license: Apache-2.0
     meta.crossplane.io/description: |
       This configuration provides apis for the BACK stack
@@ -28,4 +28,3 @@ spec:
       version: ">=v0.37.1"
     - provider: xpkg.upbound.io/upbound/provider-azure-network
       version: ">=v0.37.1"
-    
