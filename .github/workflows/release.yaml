@@ -137,9 +137,9 @@ jobs:
 
       - name: Build Porter bundle
         run: |
-          porter build --version 0.5.0+${{ steps.tag.outputs.VERSION_TAG }}
+          porter build --dir bundle --version 0.5.0+${{ steps.tag.outputs.VERSION_TAG }}
       
       - name: Publish Porter bundle
         run: |
-          porter publish --registry ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-bundle
-          porter publish --registry ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-bundle --tag latest
+          porter publish --dir bundle --registry ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-bundle
+          porter publish --dir bundle --registry ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-bundle --tag latest
