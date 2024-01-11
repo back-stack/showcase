@@ -129,6 +129,7 @@ jobs:
       - name: Install porter
         run: |
           curl -L https://cdn.porter.sh/$PORTER_VERSION/install-linux.sh | bash
+          echo "/home/runner/.porter" >> $GITHUB_PATH
 
       - name: Install porter mixins
         run: |
