@@ -1,11 +1,11 @@
 schemaType: Bundle
 schemaVersion: 1.0.1
-name: back-stack
-version: 0.1.0
+name: showcase-bundle
+version: 0.5.0
 description: "The BACK stack showcase bundle"
 
 dockerfile: template.Dockerfile
-registry: "localhost:5000"
+registry: "ghcr.io/back-stack"
 
 credentials:
   # required
@@ -33,10 +33,15 @@ credentials:
       - install
 
 parameters:
-  - name: use-kind
-    env: USE_KIND
-    type: boolean
-    default: true
+  - name: cluster-type
+    env: CLUSTER_TYPE
+    type: string
+    default: kind
+    enum:
+    - kind
+    - eks
+    - aks
+    - gke
   - name: repository
     env: REPOSITORY
     type: string
@@ -79,7 +84,68 @@ install:
       description: "Ensure Kubernetes Connection"
       command: ./helpers.sh
       arguments:
-        - install
+        - ensure_kubernetes
+  - helm3:
+      description: "Install ingress-nginx"
+      name: ingress-nginx
+      namespace: ingress-nginx
+      chart: ingress-nginx/ingress-nginx
+      version: 4.8.3
+      wait: true
+      values:
+        - ./manifests/ingress-nginx/values-${bundle.parameters.cluster-type}.yaml
+  - helm3:
+      description: "Install crossplane"
+      name: crossplane
+      namespace: crossplane-system
+      chart: crossplane-stable/crossplane
+      wait: true
+      set:
+        args: '{--enable-external-secret-stores}'
+  - helm3:
+      description: "Install vault ess plugin"
+      name: ess-plugin-vault
+      namespace: crossplane-system
+      chart: oci://xpkg.upbound.io/crossplane-contrib/ess-plugin-vault
+      wait: true
+      values:
+        - ./manifests/ess-plugin-vault.yaml 
+  - kubernetes:
+      description: "Define Crossplane RuntimeConfig"
+      manifests:
+        - ./manifests/providers/runtime-config.yaml
+  - kubernetes:
+      description: "Define Crossplane Providers"
+      manifests:
+        - ./manifests/providers/providers.yaml
+  - exec:
+      description: "Wait for providers to become healthy"
+      command: ./helpers.sh
+      arguments:
+        - validate_providers
+  - kubernetes:
+      description: "Configure Crossplane Providers"
+      manifests:
+       - ./manifests/providers/provider-configs.yaml
+  - kubernetes:
+      description: "Install BACK Stack Configuration"
+      manifests:
+       - ./manifests/back-stack.yaml
+  - exec:
+      description: "Validate BACK Stack Configuration"
+      command: ./helpers.sh
+      arguments:
+        - validate_configuration
+  - exec:
+      description: "Deploy BACK Stack"
+      command: ./helpers.sh
+      arguments:
+        - deploy_backstack_hub
+  - exec:
+      description: "Install Secrets"
+      command: ./helpers.sh
+      arguments:
+        - deploy_secrets
 
 # Define the steps that should execute when the bundle is upgraded
 upgrade:
@@ -92,7 +158,7 @@ upgrade:
 # Define the steps that should execute when the bundle is uninstalled
 uninstall:
   - exec:
-      description: "Uninstall Hello World"
+      description: "Uninstall BACK Stack"
       command: ./helpers.sh
       arguments:
         - uninstall
