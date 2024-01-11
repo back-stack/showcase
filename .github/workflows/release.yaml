@@ -141,5 +141,5 @@ jobs:
       
       - name: Publish Porter bundle
         run: |
-          porter publish --dir bundle --registry ${{ env.REGISTRY }}
-          porter publish --dir bundle --registry ${{ env.REGISTRY }} --tag latest
+          porter publish --dir bundle --registry ${{ env.REGISTRY }}/back-stack
+          porter publish --dir bundle --registry ${{ env.REGISTRY }}/back-stack --tag latest
