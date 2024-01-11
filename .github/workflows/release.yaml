@@ -133,7 +133,7 @@ jobs:
 
       - name: Install porter mixins
         run: |
-          porter mixin install docker && porter mixin install helm3 && porter mixin install kubernetes
+          porter mixin install docker --version v1.0.2 && porter mixin install kubernetes --version v1.0.3 && porter mixin install helm3 --feed-url https://mchorfa.github.io/porter-helm3/atom.xml --version v1.0.1
 
       - name: Build Porter bundle
         run: |
