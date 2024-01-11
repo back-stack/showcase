@@ -10,6 +10,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
   CROSSPLANE_VERSION: v1.14.4
+  PORTER_VERSION: v1.0.15
 
 jobs:
   configuration:
@@ -101,3 +102,43 @@ jobs:
         run: |
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backstage:${{ steps.tag.outputs.VERSION_TAG }}
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backstage:latest
+  
+  bundle:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      packages: write
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set tag
+        run: echo "VERSION_TAG=$(git rev-parse --short=8 HEAD)" >> $GITHUB_OUTPUT
+        id: tag
+      
+      - name: Log in to the Container registry
+        uses: docker/login-action@65b78e6e13532edd9afa3aa52ac7964289d1a9c1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install porter
+        run: |
+          curl -L https://cdn.porter.sh/$PORTER_VERSION/install-linux.sh | bash
+
+      - name: Install porter mixins
+        run: |
+          porter mixin install docker && porter mixin install helm3 && porter mixin install kubernetes
+
+      - name: Build Porter bundle
+        run: |
+          porter build --version ${{ steps.tag.outputs.VERSION_TAG }}
+      
+      - name: Publish Porter bundle
+        run: |
+          porter publish --registry ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-bundle
+          porter publish --registry ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-bundle --tag latest

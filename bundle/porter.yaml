@@ -1,11 +1,10 @@
 schemaType: Bundle
 schemaVersion: 1.0.1
+registry: "ghcr.io/back-stack"
 name: showcase-bundle
-version: 0.5.0
 description: "The BACK stack showcase bundle"
 
 dockerfile: template.Dockerfile
-registry: "ghcr.io/back-stack"
 
 credentials:
   # required
