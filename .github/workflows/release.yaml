@@ -137,7 +137,7 @@ jobs:
 
       - name: Build Porter bundle
         run: |
-          porter build --version ${{ steps.tag.outputs.VERSION_TAG }}
+          porter build --version 0.5.0
       
       - name: Publish Porter bundle
         run: |
