@@ -46,47 +46,89 @@ EOF
 ./local-install.sh
 ```
 
-## Installing with porter
+## Installing with Porter
 You can also use [Porter][getporter] to perform the install
+This Cloud Native Application Bundle supports installing the back stack on EKS, or locally using KinD
 
-### Steps
-1. Install porter [[link]][install-porter]
-1. Create a credentials file
-    ```yaml
-    schemaType: CredentialSet
-    schemaVersion: 1.0.1
-    name: back-stack
-    credentials:
-      - name: github-token
-        source:
-          value: <personal access token>
-      - name: vault-token
-        source:
-          value: root # this is the default for 'dev' mode
-      - name: azure-credentials
-        source:
-          path: ~/azure-credentials.json
-      - name: aws-credentials
-        source:
-          path: ~/.aws/credentials 
-      - name: kubeconfig # if installing into an existing kubernetes cluster
-        source:
-          path: ~/.kube/config 
+### Porter Bundle Info
+Name: showcase-bundle
+Description: The BACK stack showcase bundle
+Version: 0.5.0+e1212b15
+Porter Version: v1.0.15
+
+Credentials:
+---
+
+| Name              | Description                                            | Required | 
+|-------------------|--------------------------------------------------------|----------|
+| aws-credentials   | Credentials to be used for Crossplane `provider-aws`   | true     |
+| azure-credentials | Credentials to be used for Crossplane `provider-azure` | true     |
+| github-token      | Github API token                                       | true     |
+| kubeconfig        | kubeconfig to connect to non-local cluster             | false    |
+| vault-token       | This should always be `root`                           | true     |
+
+Parameters:
+---
+
+| Name           | Description                                                       | Type   | Default                                  | Required |
+|----------------|-------------------------------------------------------------------|--------|------------------------------------------|----------|
+| argocd-host    | DNS name for ArgoCD                                               | string | `argocd-7f000001.nip.io`                 | false    |
+| backstage-host | DNS name for Backstage                                            | string | `backstage-7f000001.nip.io`              | false    |
+| cluster-type   | Target kubernetes cluster type. Accepted values are `kind`, `eks` | string | `kind`                                   | false    |
+| repository     | Gitops repository for cluster requests and catalog-info           | string | `https://github.com/back-stack/showcase` | true     |
+| vault-host     | DNS name for Vault                                                | string | `vault-7f000001.nip.io`                  | false    |
+
+
+This bundle uses the following tools: docker, exec, helm3, kubernetes.
+
+To install this bundle run the following commands, passing `--param KEY=VALUE` for any parameters you want to customize:
+```sh
+porter credentials generate mycreds --reference ghcr.io/back-stack/showcase-bundle:latest
+```
+```sh
+porter install --reference ghcr.io/back-stack/showcase-bundle:latest --credential-set mycreds --param repository=https://github.com/USER/REPO
+```
+
+### Installing Locally with KinD
+#### Prerequisites
+The porter bundle already includes KinD, so the only prerequisite is Docker.
+
+1.  Install porter (see above)
+1.  Generate the credentials config, leaving the `kubeconfig` empty (it will be ignored)
     ```
-1. Create a parameters file
-    ```yaml
-    schemaType: ParameterSet
-    schemaVersion: 1.0.1
-    name: back-stack
-    parameters:
-      - name: 
+    porter credentials generate mycreds --reference ghcr.io/back-stack/showcase-bundle:latest
     ```
-1. Install the BACK stack
+1.  Install the bundle; the default `cluster-type` and `*-host` parameters are configured for local deployment
     ```shell
-    porter install back-stack --reference ghcr.io/back-stack/showcase-bundle:v0.5.0 --credential-set back-stack --parameter-set back-stack
+    porter install back-stack --reference ghcr.io/back-stack/showcase-bundle:latest --credential-set mycreds --param repository=repository=https://github.com/USER/REPO
     ```
 
+### Installing into EKS
+#### Prerequisites
+- Existing EKS cluster with [AWS Load Balancer Controller][alb-controller] add-on installed
+- local `kubeconfig` file to connect to the cluster
 
+1.  Install porter (see above)
+1.  Generate the credentials config, specifying the path to the `kubeconfig` file
+    ```
+    porter credentials generate mycreds --reference ghcr.io/back-stack/showcase-bundle:latest
+    ```
+1.  Install the bundle; set `cluster-type` to `eks` and specify DNS names that you want to use to access the BACK stack services. This can either be done using `--param` flags, or by generating a parameter set
+    ```shell
+    # using --param
+    porter install back-stack --reference ghcr.io/back-stack/showcase-bundle:latest --credential-set mycreds --param repository=repository=https://github.com/USER/REPO --param cluster-type=eks --param argocd-host=ARGOCD_DNS_NAME --param backstage-host=BACKSTAGE_DNS_NAME --param vault-host=VAULT_DNS_NAME
+    
+    # using parameter set
+    porter parameters generate myparams --reference ghcr.io/back-stack/showcase-bundle:latest
+    
+    porter install back-stack --refrence ghcr.io/back-stack/showcase-bundle:latest --credential-set mycreds --parameter-set myparams
+    ```
+1.  After installation is complete, you need to ensure the DNS names specified for `argocd-host`, `backstage-host`, and `vault-host` all resolve to the ingress service created during installation. The endpoint for this can be found by checking the bundle outputs
+    ```
+    porter installations output show ingress -i back-stack
+    ```
+    This can be done by updating the DNS records directly if you control them, or by updating `/etc/hosts` or using a local DNS server such as `dnsmasq`.  
 
 [getporter]: https://getporter.org
 [install-porter]: https://getporter.org/docs/getting-started/install-porter/
+[alb-controller]: https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html
