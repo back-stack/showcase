@@ -98,9 +98,9 @@ The porter bundle already includes KinD, so the only prerequisite is Docker.
     ```
     porter credentials generate mycreds --reference ghcr.io/back-stack/showcase-bundle:latest
     ```
-1.  Install the bundle; the default `cluster-type` and `*-host` parameters are configured for local deployment
+1.  Install the bundle; the default `cluster-type` and `*-host` parameters are configured for local deployment, and you need to allow porter to access your local docker daemon.
     ```shell
-    porter install back-stack --reference ghcr.io/back-stack/showcase-bundle:latest --credential-set mycreds --param repository=repository=https://github.com/USER/REPO
+    porter install back-stack --reference ghcr.io/back-stack/showcase-bundle:latest --credential-set mycreds --param repository=repository=https://github.com/USER/REPO --allow-docker-host-access
     ```
 
 ### Installing into EKS
