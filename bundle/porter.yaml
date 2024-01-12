@@ -64,6 +64,10 @@ outputs:
     path: /home/nonroot/.kube/config
     applyTo:
       - install
+  - name: ingress
+    type: string
+    applyTo:
+      - install
 
 mixins:
   - exec
@@ -93,6 +97,12 @@ install:
       wait: true
       values:
         - ./manifests/ingress-nginx/values-${bundle.parameters.cluster-type}.yaml
+      outputs:
+        - name: ingress
+          resourceType: service
+          resourceName: ingress-nginx-controller
+          namespace: ingress-nginx
+          jsonPath: "{.status.loadBalancer.ingress}"
   - helm3:
       description: "Install crossplane"
       name: crossplane
