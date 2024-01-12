@@ -55,7 +55,7 @@ Credentials:
 ---
 
 | Name              | Description                                            | Required |
-|-------------------|--------------------------------------------------------|----------|
+| ----------------- | ------------------------------------------------------ | -------- |
 | aws-credentials   | Credentials to be used for Crossplane `provider-aws`   | true     |
 | azure-credentials | Credentials to be used for Crossplane `provider-azure` | true     |
 | github-token      | Github API token                                       | true     |
@@ -67,7 +67,7 @@ Parameters:
 ---
 
 | Name           | Description                                                       | Type   | Default                                  | Required |
-|----------------|-------------------------------------------------------------------|--------|------------------------------------------|----------|
+| -------------- | ----------------------------------------------------------------- | ------ | ---------------------------------------- | -------- |
 | argocd-host    | DNS name for ArgoCD                                               | string | `argocd-7f000001.nip.io`                 | false    |
 | backstage-host | DNS name for Backstage                                            | string | `backstage-7f000001.nip.io`              | false    |
 | cluster-type   | Target kubernetes cluster type. Accepted values are `kind`, `eks` | string | `kind`                                   | false    |
