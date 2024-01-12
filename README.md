@@ -15,27 +15,29 @@ You will use [Porter][getporter] to perform the installation. Currently, the gen
 
 Credentials:
 
+**NOTE**: Although cloud provider credentials are not required, not supplying any means you will not be able to provision any new clusters, outside of bootstrap.
+
 ---
 
-| Name              | Description                                            | Required |
-| ----------------- | ------------------------------------------------------ | -------- |
-| aws-credentials   | Credentials to be used for Crossplane `provider-aws`   | true     |
-| azure-credentials | Credentials to be used for Crossplane `provider-azure` | true     |
-| github-token      | Github API token                                       | true     |
-| kubeconfig        | kubeconfig to connect to non-local cluster             | false    |
-| vault-token       | This should always be `root`                           | true     |
+| Name              | Description                                            | Required | Comments |
+| ----------------- | ------------------------------------------------------ | -------- | - |
+| aws-credentials   | Credentials to be used for Crossplane `provider-aws`   | false    | This is required if `cluster-type` is set to `eks` |
+| azure-credentials | Credentials to be used for Crossplane `provider-azure` | false    |   |
+| github-token      | Github API token                                       | true     |   |
+| kubeconfig        | kubeconfig to connect to non-local cluster             | false    |   |
+| vault-token       | This should always be `root`                           | true     |   |
 
 Parameters:
 
 ---
 
-| Name           | Description                                                       | Type   | Default                                  | Required |
-| -------------- | ----------------------------------------------------------------- | ------ | ---------------------------------------- | -------- |
-| argocd-host    | DNS name for ArgoCD                                               | string | `argocd-7f000001.nip.io`                 | false    |
-| backstage-host | DNS name for Backstage                                            | string | `backstage-7f000001.nip.io`              | false    |
-| cluster-type   | Target kubernetes cluster type. Accepted values are `kind`, `eks` | string | `kind`                                   | false    |
-| repository     | Gitops repository for cluster requests and catalog-info           | string | `https://github.com/back-stack/showcase` | true     |
-| vault-host     | DNS name for Vault                                                | string | `vault-7f000001.nip.io`                  | false    |
+| Name           | Description                                                       | Type   | Default                                  | Required | Comments |
+| -------------- | ----------------------------------------------------------------- | ------ | ---------------------------------------- | -------- | - |
+| argocd-host    | DNS name for ArgoCD                                               | string | `argocd-7f000001.nip.io`                 | false    |   |
+| backstage-host | DNS name for Backstage                                            | string | `backstage-7f000001.nip.io`              | false    |   |
+| cluster-type   | Target kubernetes cluster type. Accepted values are `kind`, `eks` | string | `kind`                                   | true     |   |
+| repository     | Gitops repository for cluster requests and catalog-info           | string | `https://github.com/back-stack/showcase` | true     |   |
+| vault-host     | DNS name for Vault                                                | string | `vault-7f000001.nip.io`                  | false    |   |
 
 This bundle uses the following tools: docker, exec, helm3, Kubernetes.
 
