@@ -98,7 +98,7 @@ The Porter bundle already includes KinD, so the only prerequisite is Docker/Dock
     porter installations output show ingress -i back-stack
     ```
 
-    This can be done by updating the DNS records directly if you control them, or by updating `/etc/hosts` or using a local DNS server such as `dnsmasq`.
+    For this showcase, you can update `/etc/hosts`.
 
 [getporter]: https://getporter.org
 [alb-controller]: https://docs.aws.amazon.com/eks/latest/userguide/aws-load-balancer-controller.html
