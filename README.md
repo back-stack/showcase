@@ -15,7 +15,7 @@ You will use [Porter][getporter] to perform the installation. Currently, the gen
 
 Credentials:
 
-**NOTE**: Although cloud provider credentials are not required, not supplying any means you cannot provision any new clusters.
+**NOTE**: Although cloud provider credentials are not required, you cannot provision new clusters.
 
 ---
 
