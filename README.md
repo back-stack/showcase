@@ -59,13 +59,13 @@ The Porter bundle already includes KinD, so the only prerequisite is Docker/Dock
 2.  Generate the credentials config, leaving the `kubeconfig` empty (it will be ignored)
 
     ```sh
-    porter credentials generate mycreds --reference ghcr.io/back-stack/showcase-bundle:latest
+    porter credentials generate back-stack-cloud-creds --reference ghcr.io/back-stack/showcase-bundle:latest
     ```
 
 3.  Install the bundle; the default `cluster-type` and `*-host` parameters are configured for local deployment, and you need to allow Porter to access your local docker daemon.
 
     ```sh
-    porter install back-stack --reference ghcr.io/back-stack/showcase-bundle:latest --credential-set mycreds --param repository=repository=https://github.com/USER/REPO --allow-docker-host-access
+    porter install back-stack --reference ghcr.io/back-stack/showcase-bundle:latest --credential-set back-stack-cloud-creds --param repository=repository=https://github.com/USER/REPO --allow-docker-host-access
     ```
 
 ### Installing into EKS
@@ -77,19 +77,19 @@ The Porter bundle already includes KinD, so the only prerequisite is Docker/Dock
 2.  Generate the credentials config, specifying the path to the `kubeconfig` file
 
     ```sh
-    porter credentials generate mycreds --reference ghcr.io/back-stack/showcase-bundle:latest
+    porter credentials generate back-stack-cloud-creds --reference ghcr.io/back-stack/showcase-bundle:latest
     ```
 
 3.  Install the bundle; set `cluster-type` to `eks` and specify DNS names that you want to use to access the BACK stack services. This can either be done using `--param` flags or by generating a parameter set
 
     ```sh
     # using --param
-    porter install back-stack --reference ghcr.io/back-stack/showcase-bundle:latest --credential-set mycreds --param repository=repository=https://github.com/USER/REPO --param cluster-type=eks --param argocd-host=ARGOCD_DNS_NAME --param backstage-host=BACKSTAGE_DNS_NAME --param vault-host=VAULT_DNS_NAME
+    porter install back-stack --reference ghcr.io/back-stack/showcase-bundle:latest --credential-set back-stack-cloud-creds --param repository=repository=https://github.com/USER/REPO --param cluster-type=eks --param argocd-host=ARGOCD_DNS_NAME --param backstage-host=BACKSTAGE_DNS_NAME --param vault-host=VAULT_DNS_NAME
 
     # using parameter set
     porter parameters generate myparams --reference ghcr.io/back-stack/showcase-bundle:latest
 
-    porter install back-stack --reference ghcr.io/back-stack/showcase-bundle:latest --credential-set mycreds --parameter-set myparams
+    porter install back-stack --reference ghcr.io/back-stack/showcase-bundle:latest --credential-set back-stack-cloud-creds --parameter-set myparams
     ```
 
 4.  After installation, you need to ensure the DNS names specified for `argocd-host`, `backstage-host`, and `vault-host` all resolve to the ingress service created during installation. The endpoint for this can be found by checking the bundle outputs
