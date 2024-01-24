@@ -1,0 +1,44 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/kubernetes-helm-minikube
+{
+	"name": "back-stack/showcase",
+	// Use a Dockerfile or Docker Compose file.
+	// https://containers.dev/guide/dockerfile
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+
+	"features": {
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {
+			"enableNonRootDocker": "true",
+			"moby": "true"
+		}
+	},
+	
+	"hostRequirements": {
+		"cpus": 4
+	},
+
+
+	// Configure tool-specific properties.
+	"customizations": {
+		// Configure properties specific to VS Code.
+		"vscode": {
+			// Set *default* container specific settings.json values on container create.
+			"settings": {
+				"files.insertFinalNewline": true,
+			},
+			// Add the IDs of extensions you want installed when the container is created.
+			"extensions": [
+				"github.vscode-github-actions",
+			]
+		}
+	},
+
+	// Use 'postCreateCommand' to run commands everytime the container is created.
+	"postCreateCommand": "/bin/bash -c .devcontainer/post-create.sh",
+
+	// Use 'postStartCommand' to run commands everytime the container is started.
+	"postStartCommand": "/bin/bash -c .devcontainer/post-start.sh"
+
+}
