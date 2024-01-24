@@ -15,7 +15,7 @@ You will use [Porter][getporter] to perform the installation. Currently, the gen
 
 Credentials:
 
-**NOTE**: Although cloud provider credentials are not required, you cannot provision new clusters.
+**NOTE**: Although cloud provider credentials are not required, without them you cannot provision new clusters.
 
 ---
 
@@ -67,6 +67,12 @@ The Porter bundle already includes KinD, so the only prerequisite is Docker/Dock
     ```sh
     porter install back-stack --reference ghcr.io/back-stack/showcase-bundle:latest --credential-set back-stack-cloud-creds --param repository=repository=https://github.com/USER/REPO --allow-docker-host-access
     ```
+
+To connect to the KinD cluster running the BACK stack, update your kubeconfig:
+
+```sh
+porter installations output show kubeconfig -i back-stack > ~/.kube/config
+```
 
 ### Installing into EKS
 
