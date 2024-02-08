@@ -5,34 +5,34 @@ metadata:
   namespace: argocd
 spec:
   generators:
-  - clusters:
-      selector:
-        matchLabels:
-          clusterType: spoke        
-  template: 
+    - clusters:
+        selector:
+          matchLabels:
+            clusterType: spoke
+  template:
     metadata:
-      name: '{{name}}-kyverno'
+      name: "{{name}}-kyverno"
       annotations:
         argocd.argoproj.io/sync-wave: "1"
     spec:
       project: "default"
       source:
         repoURL: https://github.com/kyverno/kyverno
-        targetRevision: release-1.10
+        targetRevision: release-1.11
         path: charts/kyverno
         helm:
           releaseName: "{{name}}-kyverno"
           valueFiles:
-          - "values.yaml"
+            - "values.yaml"
       destination:
-        server: '{{server}}'
+        server: "{{server}}"
         namespace: kyverno
       syncPolicy:
         syncOptions:
-        - Replace=true
-        - CreateNamespace=true
+          - Replace=true
+          - CreateNamespace=true
         automated:
-          selfHeal: true  
+          selfHeal: true
         retry:
           limit: 30
           backoff:
