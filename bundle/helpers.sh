@@ -20,13 +20,13 @@ deploy_backstack_hub() {
       kind: Hub
       metadata:
         name: hub
-      spec: 
+      spec:
         parameters:
           clusterId: local
           repository: ${REPOSITORY}
           backstage:
             host: ${BACKSTAGE_HOST}
-            image: 
+            image:
               registry: ghcr.io
               repository: back-stack/showcase-backstage
               tag: latest
@@ -91,7 +91,6 @@ EOF
 EOF
 }
 
-
 upgrade() {
   echo World 2.0
 }
@@ -108,8 +107,7 @@ ensure_namespace() {
 
 ensure_kubernetes() {
   if [ "$CLUSTER_TYPE" = "kind" ]; then
-    if $(kind get clusters | grep -q ${CLUSTER_NAME}) 
-    then
+    if $(kind get clusters | grep -q ${CLUSTER_NAME}); then
       echo KinD Cluster Exists
       kind export kubeconfig --name ${CLUSTER_NAME} --kubeconfig=${K8S_CFG}
     else
@@ -120,7 +118,7 @@ ensure_kubernetes() {
     KIND_DIND_IP=$(docker inspect -f "{{ .NetworkSettings.Networks.kind.IPAddress }}" ${CLUSTER_NAME}-control-plane)
     sed -i -e "s@server: .*@server: https://${KIND_DIND_IP}:6443@" /home/nonroot/.kube/config
   fi
-  kubectl get ns > /dev/null
+  kubectl get ns >/dev/null
 }
 
 # Call the requested function and pass the arguments as-is

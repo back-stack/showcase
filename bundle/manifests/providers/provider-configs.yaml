@@ -24,7 +24,7 @@ spec:
     secretRef:
       namespace: crossplane-system
       name: azure-secret
-      key: credentials    
+      key: credentials
 ---
 apiVersion: aws.upbound.io/v1beta1
 kind: ProviderConfig
