@@ -37,10 +37,10 @@ parameters:
     type: string
     default: kind
     enum:
-    - kind
-    - eks
-    - aks
-    - gke
+      - kind
+      - eks
+      - aks
+      - gke
   - name: repository
     env: REPOSITORY
     type: string
@@ -110,7 +110,7 @@ install:
       chart: crossplane-stable/crossplane
       wait: true
       set:
-        args: '{--enable-external-secret-stores}'
+        args: "{--enable-external-secret-stores}"
   - helm3:
       description: "Install vault ess plugin"
       name: ess-plugin-vault
@@ -118,7 +118,7 @@ install:
       chart: oci://xpkg.upbound.io/crossplane-contrib/ess-plugin-vault
       wait: true
       values:
-        - ./manifests/ess-plugin-vault.yaml 
+        - ./manifests/ess-plugin-vault.yaml
   - kubernetes:
       description: "Define Crossplane RuntimeConfig"
       manifests:
@@ -135,11 +135,11 @@ install:
   - kubernetes:
       description: "Configure Crossplane Providers"
       manifests:
-       - ./manifests/providers/provider-configs.yaml
+        - ./manifests/providers/provider-configs.yaml
   - kubernetes:
       description: "Install BACK Stack Configuration"
       manifests:
-       - ./manifests/back-stack.yaml
+        - ./manifests/back-stack.yaml
   - exec:
       description: "Validate BACK Stack Configuration"
       command: ./helpers.sh
@@ -159,7 +159,7 @@ install:
 # Define the steps that should execute when the bundle is upgraded
 upgrade:
   - exec:
-      description: "World 2.0"
+      description: "Not implemented at this time"
       command: ./helpers.sh
       arguments:
         - upgrade
