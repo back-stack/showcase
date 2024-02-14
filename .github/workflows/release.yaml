@@ -101,7 +101,7 @@ jobs:
       - name: Push the image
         run: |
           docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backstage:${{ steps.tag.outputs.VERSION_TAG }}
-          docker push --force ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backstage:latest
+          docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backstage:latest
   
   bundle:
     runs-on: ubuntu-latest
