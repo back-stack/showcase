@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
-K8S_CFG=/home/nonroot/.kube/config
+K8S_CFG_INTERNAL=/home/nonroot/.kube/config
+K8S_CFG_EXTERNAL=/home/nonroot/.kube/config-external
 CLUSTER_NAME=backstack
 
 validate_providers() {
@@ -109,14 +110,16 @@ ensure_kubernetes() {
   if [ "$CLUSTER_TYPE" = "kind" ]; then
     if $(kind get clusters | grep -q ${CLUSTER_NAME}); then
       echo KinD Cluster Exists
-      kind export kubeconfig --name ${CLUSTER_NAME} --kubeconfig=${K8S_CFG}
+      kind export kubeconfig --name ${CLUSTER_NAME} --kubeconfig=${K8S_CFG_INTERNAL}
+      kind export kubeconfig --name ${CLUSTER_NAME} --kubeconfig=${K8S_CFG_EXTERNAL}
     else
       echo Create KinD Cluster
-      kind create cluster --name ${CLUSTER_NAME} --kubeconfig=${K8S_CFG} --config=/cnab/app/kind.cluster.config --wait=40s
+      kind create cluster --name ${CLUSTER_NAME} --kubeconfig=${K8S_CFG_INTERNAL} --config=/cnab/app/kind.cluster.config --wait=40s
+      kind export kubeconfig --name ${CLUSTER_NAME} --kubeconfig=${K8S_CFG_EXTERNAL}
     fi
     docker network connect kind ${HOSTNAME}
     KIND_DIND_IP=$(docker inspect -f "{{ .NetworkSettings.Networks.kind.IPAddress }}" ${CLUSTER_NAME}-control-plane)
-    sed -i -e "s@server: .*@server: https://${KIND_DIND_IP}:6443@" /home/nonroot/.kube/config
+    sed -i -e "s@server: .*@server: https://${KIND_DIND_IP}:6443@" ${K8S_CFG_INTERNAL}
   fi
   kubectl get ns >/dev/null
 }
