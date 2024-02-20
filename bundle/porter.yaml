@@ -73,7 +73,7 @@ outputs:
     type: string
     applyTo:
       - install
-  - name: argo-initial-pass
+  - name: argo-initial-passwd
     type: string
     applyTo:
       - install
@@ -168,9 +168,13 @@ install:
       description: "Grab ArgoCD Initial Password"
       command: ./helpers.sh
       arguments:
-        - return_argo_default_pass
+        - return_argo_initial_pass
       outputs:
-        - name: argo-initial-pass
+        - name: argo-initial-passwd
+          # this feels hackish. Porter has a limitation of needing to pass through
+          # regex/jsonrgex rather than just giving you the direct output of
+          # the command you want output from...
+          regex: '^.'
 
 # Define the steps that should execute when the bundle is upgraded
 upgrade:

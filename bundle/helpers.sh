@@ -18,7 +18,8 @@ deploy_backstack_hub() {
   # this is a silly way to solve the problem of waiting for the custom CRDs to
   # show up and be ready, but for now its an easy enough way to get around it
   # not dropping out of the install. This is NOT a fool proof way of solving this
-  sleep 45
+  echo "Waiting for Backstack CRDs to be ready"
+  while ! kubectl get crd hubs.backstack.dev &>/dev/null; do sleep 1; done
   # deploy hub
   kubectl apply -f - <<-EOF
       apiVersion: backstack.dev/v1alpha1
@@ -128,7 +129,8 @@ ensure_kubernetes() {
   kubectl get ns >/dev/null
 }
 
-return_argo_default_pass() {
+return_argo_initial_pass() {
+  while ! kubectl -n argocd get secret argocd-initial-admin-secret &>/dev/null; do sleep 1; done
   kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
 }
 
