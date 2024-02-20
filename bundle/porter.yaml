@@ -73,6 +73,10 @@ outputs:
     type: string
     applyTo:
       - install
+  - name: argo-initial-pass
+    type: string
+    applyTo:
+      - install
 
 mixins:
   - exec
@@ -160,6 +164,13 @@ install:
       command: ./helpers.sh
       arguments:
         - deploy_secrets
+  - exec:
+      description: "Grab ArgoCD Initial Password"
+      command: ./helpers.sh
+      arguments:
+        - return_argo_default_pass
+      outputs:
+        - name: argo-initial-pass
 
 # Define the steps that should execute when the bundle is upgraded
 upgrade:
