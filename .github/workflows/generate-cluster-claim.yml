@@ -10,18 +10,18 @@ on:
     inputs:
       clustername:
         # Friendly description to be shown in the UI instead of 'name'
-        description: 'Cluster name'
+        description: "Cluster name"
         # Default value if no value is explicitly provided
-        default: 'cluster'
+        default: "cluster"
         # Input has to be provided for the workflow to run
         required: true
         # The data type of the input
         type: string
       numNodes:
         # Friendly description to be shown in the UI instead of 'name'
-        description: 'Number of nodes in this cluster'
+        description: "Number of nodes in this cluster"
         # Default value if no value is explicitly provided
-        default: '1'
+        default: "1"
         # Input has to be provided for the workflow to run
         required: true
         # The data type of the input
@@ -36,33 +36,33 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    - name: Checkout template
-      uses: actions/checkout@v2
-      
-    # Runs a single command using the runners shell
-    - name: Generate cluster claim
-      run: |
-        cp demo/template/cluster-claim-template.yaml ./demo/clusters/${{ inputs.clustername }}-cluster.yaml
-        sed -i 's/{{cluster-name}}/${{ inputs.clustername }}/g' ./demo/clusters/${{ inputs.clustername }}-cluster.yaml
-        sed -i 's/{{num-nodes}}/${{ inputs.numNodes }}/g' ./demo/clusters/${{ inputs.clustername }}-cluster.yaml
-        
-    - name: Install Kyverno CLI
-      uses: kyverno/action-install-cli@v0.2.0
+      - name: Checkout template
+        uses: actions/checkout@v2
 
-    - name: Check Kyverno install
-      run: kyverno version
+      # Runs a single command using the runners shell
+      - name: Generate cluster claim
+        run: |
+          cp demo/template/cluster-claim-template.yaml ./demo/clusters/${{ inputs.clustername }}-cluster.yaml
+          sed -i 's/{{cluster-name}}/${{ inputs.clustername }}/g' ./demo/clusters/${{ inputs.clustername }}-cluster.yaml
+          sed -i 's/{{num-nodes}}/${{ inputs.numNodes }}/g' ./demo/clusters/${{ inputs.clustername }}-cluster.yaml
 
-    - name: Validate cluster claim
-      run: |
-        kyverno apply ./kyverno/policies/crossplane -b main  --resource=./demo/clusters/${{ inputs.clustername }}-cluster.yaml        
-      
-    - name: Setup git config
-      run: |
-        # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
-        git config user.name "GitHub Actions Bot"
-        git config user.email "<>"
-    - name: Commit file
-      run: |
-        git add ./demo/clusters/${{ inputs.clustername }}-cluster.yaml
-        git commit -m "Created cluster claim"
-        git push origin
+      - name: Install Kyverno CLI
+        uses: kyverno/action-install-cli@v0.2.0
+
+      - name: Check Kyverno install
+        run: kyverno version
+
+      - name: Validate cluster claim
+        run: |
+          kyverno apply ./kyverno/policies/crossplane -b main  --resource=./demo/clusters/${{ inputs.clustername }}-cluster.yaml
+
+      - name: Setup git config
+        run: |
+          # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+      - name: Commit file
+        run: |
+          git add ./demo/clusters/${{ inputs.clustername }}-cluster.yaml
+          git commit -m "Created cluster claim"
+          git push origin

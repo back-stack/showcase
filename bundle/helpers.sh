@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
-K8S_CFG=/home/nonroot/.kube/config
+K8S_CFG_INTERNAL=/home/nonroot/.kube/config
+K8S_CFG_EXTERNAL=/home/nonroot/.kube/config-external
 CLUSTER_NAME=backstack
 
 validate_providers() {
@@ -14,19 +15,24 @@ validate_configuration() {
 }
 
 deploy_backstack_hub() {
+  # this is a silly way to solve the problem of waiting for the custom CRDs to
+  # show up and be ready, but for now its an easy enough way to get around it
+  # not dropping out of the install. This is NOT a fool proof way of solving this
+  echo "Waiting for Backstack CRDs to be ready"
+  while ! kubectl get crd hubs.backstack.dev &>/dev/null; do sleep 1; done
   # deploy hub
   kubectl apply -f - <<-EOF
       apiVersion: backstack.dev/v1alpha1
       kind: Hub
       metadata:
         name: hub
-      spec: 
+      spec:
         parameters:
           clusterId: local
           repository: ${REPOSITORY}
           backstage:
             host: ${BACKSTAGE_HOST}
-            image: 
+            image:
               registry: ghcr.io
               repository: back-stack/showcase-backstage
               tag: latest
@@ -91,7 +97,6 @@ EOF
 EOF
 }
 
-
 upgrade() {
   echo World 2.0
 }
@@ -108,19 +113,25 @@ ensure_namespace() {
 
 ensure_kubernetes() {
   if [ "$CLUSTER_TYPE" = "kind" ]; then
-    if $(kind get clusters | grep -q ${CLUSTER_NAME}) 
-    then
+    if $(kind get clusters | grep -q ${CLUSTER_NAME}); then
       echo KinD Cluster Exists
-      kind export kubeconfig --name ${CLUSTER_NAME} --kubeconfig=${K8S_CFG}
+      kind export kubeconfig --name ${CLUSTER_NAME} --kubeconfig=${K8S_CFG_INTERNAL}
+      kind export kubeconfig --name ${CLUSTER_NAME} --kubeconfig=${K8S_CFG_EXTERNAL}
     else
       echo Create KinD Cluster
-      kind create cluster --name ${CLUSTER_NAME} --kubeconfig=${K8S_CFG} --config=/cnab/app/kind.cluster.config --wait=40s
+      kind create cluster --name ${CLUSTER_NAME} --kubeconfig=${K8S_CFG_INTERNAL} --config=/cnab/app/kind.cluster.config --wait=40s
+      kind export kubeconfig --name ${CLUSTER_NAME} --kubeconfig=${K8S_CFG_EXTERNAL}
     fi
     docker network connect kind ${HOSTNAME}
     KIND_DIND_IP=$(docker inspect -f "{{ .NetworkSettings.Networks.kind.IPAddress }}" ${CLUSTER_NAME}-control-plane)
-    sed -i -e "s@server: .*@server: https://${KIND_DIND_IP}:6443@" /home/nonroot/.kube/config
+    sed -i -e "s@server: .*@server: https://${KIND_DIND_IP}:6443@" ${K8S_CFG_INTERNAL}
   fi
-  kubectl get ns > /dev/null
+  kubectl get ns >/dev/null
+}
+
+return_argo_initial_pass() {
+  while ! kubectl -n argocd get secret argocd-initial-admin-secret &>/dev/null; do sleep 1; done
+  kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d >~/argo_initial_passwd
 }
 
 # Call the requested function and pass the arguments as-is

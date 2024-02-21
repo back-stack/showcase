@@ -37,10 +37,10 @@ parameters:
     type: string
     default: kind
     enum:
-    - kind
-    - eks
-    - aks
-    - gke
+      - kind
+      - eks
+      - aks
+      - gke
   - name: repository
     env: REPOSITORY
     type: string
@@ -64,8 +64,18 @@ outputs:
     path: /home/nonroot/.kube/config
     applyTo:
       - install
+  - name: kubeconfig-external
+    type: file
+    path: /home/nonroot/.kube/config-external
+    applyTo:
+      - install
   - name: ingress
     type: string
+    applyTo:
+      - install
+  - name: argo-initial-passwd
+    type: file
+    path: /home/nonroot/argo_initial_passwd
     applyTo:
       - install
 
@@ -110,7 +120,7 @@ install:
       chart: crossplane-stable/crossplane
       wait: true
       set:
-        args: '{--enable-external-secret-stores}'
+        args: "{--enable-external-secret-stores}"
   - helm3:
       description: "Install vault ess plugin"
       name: ess-plugin-vault
@@ -118,7 +128,7 @@ install:
       chart: oci://xpkg.upbound.io/crossplane-contrib/ess-plugin-vault
       wait: true
       values:
-        - ./manifests/ess-plugin-vault.yaml 
+        - ./manifests/ess-plugin-vault.yaml
   - kubernetes:
       description: "Define Crossplane RuntimeConfig"
       manifests:
@@ -135,11 +145,11 @@ install:
   - kubernetes:
       description: "Configure Crossplane Providers"
       manifests:
-       - ./manifests/providers/provider-configs.yaml
+        - ./manifests/providers/provider-configs.yaml
   - kubernetes:
       description: "Install BACK Stack Configuration"
       manifests:
-       - ./manifests/back-stack.yaml
+        - ./manifests/back-stack.yaml
   - exec:
       description: "Validate BACK Stack Configuration"
       command: ./helpers.sh
@@ -155,11 +165,22 @@ install:
       command: ./helpers.sh
       arguments:
         - deploy_secrets
+  - exec:
+      description: "Grab ArgoCD Initial Password"
+      command: ./helpers.sh
+      arguments:
+        - return_argo_initial_pass
+      # outputs:
+      #   - name: argo-initial-passwd
+      #     # this feels hackish. Porter has a limitation of needing to pass through
+      #     # regex/jsonrgex rather than just giving you the direct output of
+      #     # the command you want output from...
+      #     regex: '^.'
 
 # Define the steps that should execute when the bundle is upgraded
 upgrade:
   - exec:
-      description: "World 2.0"
+      description: "Not implemented at this time"
       command: ./helpers.sh
       arguments:
         - upgrade

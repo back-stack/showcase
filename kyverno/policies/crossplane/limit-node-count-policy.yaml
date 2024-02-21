@@ -15,19 +15,19 @@ spec:
   validationFailureAction: Enforce
   background: true
   rules:
-  - name: limit-node-count
-    match:
-      any:
-      - resources:
-          kinds:
-          - aws.platformref.upbound.io/v1alpha1/Cluster
-    validate:
-      message: >-
-        You cannot create a cluster with more than 3 nodes.
-        Please reduce the node count and create the cluster.
-      deny:
-        conditions:
-          any:
-          - key: "{{request.object.spec.parameters.nodes.count}}"
-            operator: GreaterThan
-            value: 3
+    - name: limit-node-count
+      match:
+        any:
+          - resources:
+              kinds:
+                - aws.platformref.upbound.io/v1alpha1/Cluster
+      validate:
+        message: >-
+          You cannot create a cluster with more than 3 nodes.
+          Please reduce the node count and create the cluster.
+        deny:
+          conditions:
+            any:
+              - key: "{{request.object.spec.parameters.nodes.count}}"
+                operator: GreaterThan
+                value: 3

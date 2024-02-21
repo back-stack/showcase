@@ -15,19 +15,19 @@ spec:
   validationFailureAction: Enforce
   background: true
   rules:
-  - name: restrict-node-size
-    match:
-      any:
-      - resources:
-          kinds:
-          - aws.platformref.upbound.io/v1alpha1/Cluster
-    validate:
-      message: >-
-        You cannot create a cluster with node size large
-        Please change the node size to small or medium
-      deny:
-        conditions:
-          any:
-          - key: "{{request.object.spec.parameters.nodes.size}}"
-            operator: Equals
-            value: "large"
+    - name: restrict-node-size
+      match:
+        any:
+          - resources:
+              kinds:
+                - aws.platformref.upbound.io/v1alpha1/Cluster
+      validate:
+        message: >-
+          You cannot create a cluster with node size large
+          Please change the node size to small or medium
+        deny:
+          conditions:
+            any:
+              - key: "{{request.object.spec.parameters.nodes.size}}"
+                operator: Equals
+                value: "large"
