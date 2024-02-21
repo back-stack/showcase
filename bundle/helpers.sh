@@ -50,7 +50,7 @@ deploy_secrets() {
     apiVersion: v1
     kind: Secret
     metadata:
-      name: clusters
+      name: clusters-repository
       namespace: argocd
       labels:
         argocd.argoproj.io/secret-type: repository
