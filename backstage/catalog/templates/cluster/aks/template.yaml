@@ -43,6 +43,13 @@ spec:
           type: string
           description: Instance type associated with the Node Group.
           default: Standard_B2s
+        custom_policy_repo_url:
+          title: Custom Policy Repository Location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
     - title: Destination
       required:
         - repo_url
@@ -76,13 +83,13 @@ spec:
       action: publish:github:pull-request
       input:
         allowedHosts: ['github.com']
-        title: Request for new cluster 
+        title: Request for new cluster
         description: |
           Cluster ID: ${{ parameters.cluster_id }}
           Region:     ${{ parameters.region }}
           Version:    ${{ parameters.version }}
           Nodes:      ${{ parameters.nodes_instance_type }} (${{ parameters.nodes_count }})
-        repoUrl: ${{ parameters.repo_url }} 
+        repoUrl: ${{ parameters.repo_url }}
         branchName: ${{ parameters.pull_request_branch_name }}
   output:
     text:
@@ -90,4 +97,4 @@ spec:
         content: |
           Your New Cluster Request has been published to GitHub.
 
-          To finish creating the cluster, review and accept the [pull request](${{ steps['publish'].output.remoteUrl }}) 
+          To finish creating the cluster, review and accept the [pull request](${{ steps['publish'].output.remoteUrl }})
