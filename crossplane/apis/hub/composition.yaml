@@ -508,6 +508,29 @@ spec:
             string:
               type: Format
               fmt: "%s-kyverno"
+      - name: kyverno-policies
+        base:
+          apiVersion: helm.crossplane.io/v1beta1
+          kind: Release
+          metadata:
+            annotations:
+              crossplane.io/external-name: kyverno-policies
+          spec:
+            forProvider:
+              namespace: kyverno
+              chart:
+                name: kyverno-policies
+                repository: https://kyverno.github.io/kyverno
+        patches:
+        - type: PatchSet
+          patchSetName: target-cluster
+        - fromFieldPath: metadata.name
+          toFieldPath: metadata.name
+          transforms:
+          - type: string
+            string:
+              type: Format
+              fmt: "%s-kyverno-policies"
       - name: kyverno-argocd-cluster-generation-clusterpolicy
         base:
           apiVersion: kubernetes.crossplane.io/v1alpha1
