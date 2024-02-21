@@ -43,13 +43,10 @@ spec:
           type: string
           description: Instance type associated with the Node Group.
           default: Standard_B2s
-        custom_policy_repo_url:
+        custom_kyverno_policies:
           title: Custom Policy Repository Location
           type: string
-          ui:field: RepoUrlPicker
-          ui:options:
-            allowedHosts:
-              - github.com
+          description: The source repository of the custome Kyverno policies specific to the cluster
     - title: Destination
       required:
         - repo_url
