@@ -59,12 +59,12 @@ parameters:
     default: vault-7f000001.nip.io
 
 outputs:
-  - name: kubeconfig-internal
+  - name: kubeconfig
     type: file
     path: /home/nonroot/.kube/config
     applyTo:
       - install
-  - name: kubeconfig
+  - name: kubeconfig-external
     type: file
     path: /home/nonroot/.kube/config-external
     applyTo:
