@@ -1,0 +1,21 @@
+apiVersion: backstack.dev/v1alpha1
+kind: EKSCluster
+metadata:
+  name: de-ohio-eks-backstage
+  namespace: default
+spec:
+  parameters:
+    id: de-ohio-eks-backstage
+    region: us-east-2
+    iam:
+      roleArn: arn:aws:iam::723651357729:role/eksctl-de-eks-ohio-cluster-ServiceRole-OxBrvocK8k9F
+    version: "1.28"
+    nodes:
+      count: 3
+      instanceType: t3.small
+  writeConnectionSecretToRef:
+    name: de-ohio-eks-backstage-kubeconfig
+  publishConnectionDetailsTo:
+    name: de-ohio-eks-backstage/de-ohio-eks-backstage-kubeconfig
+    configRef:
+      name: vault
