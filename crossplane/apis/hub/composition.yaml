@@ -149,7 +149,7 @@ spec:
                     path: demo/applications
                     targetRevision: HEAD
                   destination:
-                    name: hostcluster
+                    name: hub
                     namespace: default
         patches:
         - type: PatchSet
@@ -175,7 +175,7 @@ spec:
                     path: demo/clusters
                     targetRevision: HEAD
                   destination:
-                    name: hostcluster
+                    name: hub
                     namespace: default
         patches:
         - type: PatchSet
@@ -283,7 +283,7 @@ spec:
         patches:
         - type: PatchSet
           patchSetName: target-cluster
-      - name: argocd-hostcluster-secret
+      - name: argocd-hub-secret
         base:
           apiVersion: kubernetes.crossplane.io/v1alpha1
           kind: Object
@@ -295,10 +295,10 @@ spec:
                 metadata:
                   labels:
                     argocd.argoproj.io/secret-type: cluster
-                  name: hostcluster
+                  name: hub
                   namespace: argocd
                 data:
-                  name: aG9zdGNsdXN0ZXI= # hostcluster
+                  name: aHViCg== # hub
                   server: aHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3Zj # https://kubernetes.default.svc
                   config: eyJ0bHNDbGllbnRDb25maWciOnsiaW5zZWN1cmUiOmZhbHNlfX0= #'{"tlsClientConfig":{"insecure":false}}'
         patches:
