@@ -80,9 +80,8 @@ EOF
     metadata:
       name: azure-secret
       namespace: crossplane-system
-    stringData:
-      credentials: |
-        ${AZURE_CREDENTIALS}
+    data:
+      credentials: $(echo "${AZURE_CREDENTIALS}" | base64)
 EOF
 
   kubectl apply -f - <<-EOF
@@ -91,9 +90,8 @@ EOF
     metadata:
       name: aws-secret
       namespace: crossplane-system
-    stringData:
-      credentials: |
-        ${AWS_CREDENTIALS}
+    data:
+      credentials: $(echo "${AWS_CREDENTIALS}" | base64)
 EOF
 }
 
