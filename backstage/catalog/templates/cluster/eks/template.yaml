@@ -34,6 +34,7 @@ spec:
           description: Kubernetes version of the Cluster
           default: "1.28"
           enum:
+            - "1.29"
             - "1.28"
             - "1.27"
             - "1.26"
