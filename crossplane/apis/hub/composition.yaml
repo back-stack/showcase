@@ -130,6 +130,32 @@ spec:
             string:
               type: Format
               fmt: "%s-argocd"
+      - name: argocd-applications-application
+        base:
+          apiVersion: kubernetes.crossplane.io/v1alpha1
+          kind: Object
+          spec:
+            forProvider:
+              manifest:
+                apiVersion: argoproj.io/v1alpha1
+                kind: Application
+                metadata:
+                  name: clusters
+                  namespace: argocd
+                spec:
+                  project: default
+                  source:
+                    repoURL: repository # patched
+                    path: demo/applications
+                    targetRevision: HEAD
+                  destination:
+                    name: hostcluster
+                    namespace: default
+        patches:
+        - type: PatchSet
+          patchSetName: target-cluster
+        - fromFieldPath: spec.parameters.repository
+          toFieldPath: spec.forProvider.manifest.spec.source.repoURL
       - name: argocd-clusters-application
         base:
           apiVersion: kubernetes.crossplane.io/v1alpha1
