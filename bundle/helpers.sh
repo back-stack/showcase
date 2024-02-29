@@ -50,7 +50,7 @@ deploy_secrets() {
     apiVersion: v1
     kind: Secret
     metadata:
-      name: clusters
+      name: clusters-repository
       namespace: argocd
       labels:
         argocd.argoproj.io/secret-type: repository
@@ -80,9 +80,8 @@ EOF
     metadata:
       name: azure-secret
       namespace: crossplane-system
-    stringData:
-      credentials: |
-        ${AZURE_CREDENTIALS}
+    data:
+      credentials: $(echo -n "${AZURE_CREDENTIALS}" | base64 -w 0)
 EOF
 
   kubectl apply -f - <<-EOF
@@ -91,9 +90,8 @@ EOF
     metadata:
       name: aws-secret
       namespace: crossplane-system
-    stringData:
-      credentials: |
-        ${AWS_CREDENTIALS}
+    data:
+      credentials: $(echo -n "$AWS_CREDENTIALS" | base64 -w 0)
 EOF
 }
 

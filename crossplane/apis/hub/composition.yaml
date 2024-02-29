@@ -68,6 +68,7 @@ spec:
               chart:
                 name: argo-cd
                 repository: https://argoproj.github.io/argo-helm
+                version: 5.55.0
               values:
                 configs:
                   params:
