@@ -135,6 +135,10 @@ ensure_kubernetes() {
     cp ${K8S_CFG_INTERNAL} ${K8S_CFG_EXTERNAL}
     kubectl get ns >/dev/null
   fi
+  else
+    cp ${K8S_CFG_INTERNAL} ${K8S_CFG_EXTERNAL}
+    kubectl get ns >/dev/null
+  fi
 }
 
 return_argo_initial_pass() {
