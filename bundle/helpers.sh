@@ -126,9 +126,8 @@ ensure_kubernetes() {
   elif [ "$CLUSTER_TYPE" = "eks" ]; then
     if [ ! -d "~/.aws" ]; then
       mkdir ~/.aws
+      echo -n "$AWS_CREDENTIALS" > ~/.aws/credentials
     fi
-    # Drop in AWS credentials so we can run aws-cli
-    echo -n "$AWS_CREDENTIALS" > ~/.aws/credentials
     # there is no difference between internal and external
     # when we are dealing with anything other than KinD
     cp ${K8S_CFG_INTERNAL} ${K8S_CFG_EXTERNAL}
