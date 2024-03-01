@@ -123,8 +123,7 @@ ensure_kubernetes() {
     docker network connect kind ${HOSTNAME}
     KIND_DIND_IP=$(docker inspect -f "{{ .NetworkSettings.Networks.kind.IPAddress }}" ${CLUSTER_NAME}-control-plane)
     sed -i -e "s@server: .*@server: https://${KIND_DIND_IP}:6443@" ${K8S_CFG_INTERNAL}
-  fi
-  if [ "$CLUSTER_TYPE" = "eks" ]; then
+  elif [ "$CLUSTER_TYPE" = "eks" ]; then
     if [ ! -d "~/.aws" ]; then
       mkdir ~/.aws
     fi
@@ -134,7 +133,6 @@ ensure_kubernetes() {
     # when we are dealing with anything other than KinD
     cp ${K8S_CFG_INTERNAL} ${K8S_CFG_EXTERNAL}
     kubectl get ns >/dev/null
-  fi
   else
     cp ${K8S_CFG_INTERNAL} ${K8S_CFG_EXTERNAL}
     kubectl get ns >/dev/null
