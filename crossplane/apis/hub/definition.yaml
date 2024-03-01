@@ -33,6 +33,10 @@ spec:
                   repository:
                     type: string
                     description: The URL of the git repository where claims will be synchronized
+                  kyverno-policy-repository:
+                    type: string
+                    # TODO: describe what format the repository is expected to be in
+                    description: The URL of the git repository where custom kyverno policies are stored
                   backstage:
                     type: object
                     description: Configuration for the Backstage deployment

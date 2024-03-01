@@ -30,6 +30,9 @@ spec:
                   id:
                     type: string
                     description: ID of this Cluster that other objects will use to refer to it.
+                  custom_kyverno_policies:
+                    type: string
+                    description: The source repository of the custom Kyverno policies specific to the application
                   region:
                     type: string
                     description: Region is the region you'd like your resource to be created in.
@@ -50,12 +53,13 @@ spec:
                     type: string
                     description: Kubernetes version of the Cluster
                     enum:
+                    - "1.29"
                     - "1.28"
                     - "1.27"
                     - "1.26"
                     - "1.25"
                     - "1.24"
-                    default: "1.28"
+                    default: "1.29"
                   nodes:
                     type: object
                     description: Cluster node configuration parameters.

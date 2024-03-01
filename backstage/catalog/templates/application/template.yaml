@@ -25,6 +25,10 @@ spec:
           title: Application Source
           type: string
           description: The source repository of the application to deploy
+        custom_kyverno_policies:
+          title: Custom Policy Repository Location
+          type: string
+          description: The source repository of the custome Kyverno policies specific to the application
         application_source_path:
           title: Path
           type: string
@@ -71,11 +75,11 @@ spec:
       action: publish:github:pull-request
       input:
         allowedHosts: ['github.com']
-        title: Request for new application deployment 
+        title: Request for new application deployment
         description: |
           Application Source: ${{ parameters.application_source }}
           Cluster ID: ${{ parameters.cluster_id }}
-        repoUrl: ${{ parameters.repo_url }} 
+        repoUrl: ${{ parameters.repo_url }}
         branchName: ${{ parameters.pull_request_branch_name }}
   output:
     text:
@@ -83,4 +87,4 @@ spec:
         content: |
           Your New Application Request has been published to GitHub
 
-           To finish deploying the application, review and accept the [pull request](${{ steps['publish'].output.remoteUrl }}) 
+           To finish deploying the application, review and accept the [pull request](${{ steps['publish'].output.remoteUrl }})

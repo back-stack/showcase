@@ -131,6 +131,32 @@ spec:
             string:
               type: Format
               fmt: "%s-argocd"
+      - name: argocd-applications-application
+        base:
+          apiVersion: kubernetes.crossplane.io/v1alpha1
+          kind: Object
+          spec:
+            forProvider:
+              manifest:
+                apiVersion: argoproj.io/v1alpha1
+                kind: Application
+                metadata:
+                  name: clusters
+                  namespace: argocd
+                spec:
+                  project: default
+                  source:
+                    repoURL: repository # patched
+                    path: demo/applications
+                    targetRevision: HEAD
+                  destination:
+                    name: hub
+                    namespace: default
+        patches:
+        - type: PatchSet
+          patchSetName: target-cluster
+        - fromFieldPath: spec.parameters.repository
+          toFieldPath: spec.forProvider.manifest.spec.source.repoURL
       - name: argocd-clusters-application
         base:
           apiVersion: kubernetes.crossplane.io/v1alpha1
@@ -150,7 +176,7 @@ spec:
                     path: demo/clusters
                     targetRevision: HEAD
                   destination:
-                    name: hostcluster
+                    name: hub
                     namespace: default
         patches:
         - type: PatchSet
@@ -258,7 +284,7 @@ spec:
         patches:
         - type: PatchSet
           patchSetName: target-cluster
-      - name: argocd-hostcluster-secret
+      - name: argocd-hub-secret
         base:
           apiVersion: kubernetes.crossplane.io/v1alpha1
           kind: Object
@@ -270,10 +296,10 @@ spec:
                 metadata:
                   labels:
                     argocd.argoproj.io/secret-type: cluster
-                  name: hostcluster
+                  name: hub
                   namespace: argocd
                 data:
-                  name: aG9zdGNsdXN0ZXI= # hostcluster
+                  name: aHViCg== # hub
                   server: aHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3Zj # https://kubernetes.default.svc
                   config: eyJ0bHNDbGllbnRDb25maWciOnsiaW5zZWN1cmUiOmZhbHNlfX0= #'{"tlsClientConfig":{"insecure":false}}'
         patches:
@@ -509,6 +535,29 @@ spec:
             string:
               type: Format
               fmt: "%s-kyverno"
+      - name: kyverno-policies
+        base:
+          apiVersion: helm.crossplane.io/v1beta1
+          kind: Release
+          metadata:
+            annotations:
+              crossplane.io/external-name: kyverno-policies
+          spec:
+            forProvider:
+              namespace: kyverno
+              chart:
+                name: kyverno-policies
+                repository: https://kyverno.github.io/kyverno
+        patches:
+        - type: PatchSet
+          patchSetName: target-cluster
+        - fromFieldPath: metadata.name
+          toFieldPath: metadata.name
+          transforms:
+          - type: string
+            string:
+              type: Format
+              fmt: "%s-kyverno-policies"
       - name: kyverno-argocd-cluster-generation-clusterpolicy
         base:
           apiVersion: kubernetes.crossplane.io/v1alpha1
@@ -525,7 +574,7 @@ spec:
                     policies.kyverno.io/category: Argo
                     policies.kyverno.io/severity: medium
                     policies.kyverno.io/subject: Secret
-                    kyverno.io/kyverno-version: 1.7.1
+                    kyverno.io/kyverno-version: 1.11.0
                     policies.kyverno.io/minversion: 1.7.0
                     policies.kyverno.io/description: >-
                       This policy generates and synchronizes Argo CD cluster secrets from Kubeconfig secrets.
@@ -655,7 +704,7 @@ spec:
               type: Format
               fmt: "%s-vault"
       - name: vault-poststart-script
-        base: 
+        base:
           apiVersion: kubernetes.crossplane.io/v1alpha1
           kind: Object
           spec:
@@ -668,7 +717,7 @@ spec:
                   namespace: vault
                 data:
                   run.sh: |
-                    sleep 4 
+                    sleep 4
                     vault auth enable kubernetes
                     vault write auth/kubernetes/config token_reviewer_jwt="$(cat /var/run/secrets/kubernetes.io/serviceaccount/token)" kubernetes_host="https://$KUBERNETES_PORT_443_TCP_ADDR:443" kubernetes_ca_cert=@/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
                     vault policy write crossplane - <<EOF
