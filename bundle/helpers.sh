@@ -124,7 +124,12 @@ ensure_kubernetes() {
     KIND_DIND_IP=$(docker inspect -f "{{ .NetworkSettings.Networks.kind.IPAddress }}" ${CLUSTER_NAME}-control-plane)
     sed -i -e "s@server: .*@server: https://${KIND_DIND_IP}:6443@" ${K8S_CFG_INTERNAL}
   fi
-  else
+  elif [ "$CLUSTER_TYPE" = "eks" ]; then
+    if [ ! -d "~/.aws" ]; then
+      mkdir ~/.aws
+    fi
+    # Drop in AWS credentials so we can run aws-cli
+    echo -n "$AWS_CREDENTIALS" > ~/
     # there is no difference between internal and external
     # when we are dealing with anything other than KinD
     cp ${K8S_CFG_INTERNAL} ${K8S_CFG_EXTERNAL}
