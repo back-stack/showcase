@@ -30,6 +30,9 @@ spec:
                   id:
                     type: string
                     description: ID of this Cluster that other objects will use to refer to it.
+                  custom_kyverno_policies:
+                    type: string
+                    description: The source repository of the custom Kyverno policies specific to the application
                   region:
                     type: string
                     description: Region is the region you'd like your resource to be created in.

@@ -34,6 +34,7 @@ spec:
           description: Kubernetes version of the Cluster
           default: "1.28"
           enum:
+            - "1.29"
             - "1.28"
             - "1.27"
             - "1.26"
@@ -49,6 +50,10 @@ spec:
           type: string
           description: Instance type associated with the Node Group.
           default: t3.small
+        custom_kyverno_policies:
+          title: Custom Policy Repository Location
+          type: string
+          description: The source repository of the custome Kyverno policies specific to the cluster
     - title: Destination
       required:
         - repo_url
@@ -83,13 +88,13 @@ spec:
       action: publish:github:pull-request
       input:
         allowedHosts: ['github.com']
-        title: Request for new cluster 
+        title: Request for new cluster
         description: |
           Cluster ID: ${{ parameters.cluster_id }}
           Region:     ${{ parameters.region }}
           Version:    ${{ parameters.version }}
           Nodes:      ${{ parameters.nodes_instance_type }} (${{ parameters.nodes_count }})
-        repoUrl: ${{ parameters.repo_url }} 
+        repoUrl: ${{ parameters.repo_url }}
         branchName: ${{ parameters.pull_request_branch_name }}
   output:
     text:
@@ -97,4 +102,4 @@ spec:
         content: |
           Your New Cluster Request has been published to GitHub.
 
-          To finish creating the cluster, review and accept the [pull request](${{ steps['publish'].output.remoteUrl }}) 
+          To finish creating the cluster, review and accept the [pull request](${{ steps['publish'].output.remoteUrl }})

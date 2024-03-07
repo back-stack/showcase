@@ -80,9 +80,8 @@ EOF
     metadata:
       name: azure-secret
       namespace: crossplane-system
-    stringData:
-      credentials: |
-        ${AZURE_CREDENTIALS}
+    data:
+      credentials: $(echo -n "${AZURE_CREDENTIALS}" | base64 -w 0)
 EOF
 
   kubectl apply -f - <<-EOF
@@ -91,9 +90,8 @@ EOF
     metadata:
       name: aws-secret
       namespace: crossplane-system
-    stringData:
-      credentials: |
-        ${AWS_CREDENTIALS}
+    data:
+      credentials: $(echo -n "$AWS_CREDENTIALS" | base64 -w 0)
 EOF
 }
 
@@ -125,8 +123,19 @@ ensure_kubernetes() {
     docker network connect kind ${HOSTNAME}
     KIND_DIND_IP=$(docker inspect -f "{{ .NetworkSettings.Networks.kind.IPAddress }}" ${CLUSTER_NAME}-control-plane)
     sed -i -e "s@server: .*@server: https://${KIND_DIND_IP}:6443@" ${K8S_CFG_INTERNAL}
+  elif [ "$CLUSTER_TYPE" = "eks" ]; then
+    if [ ! -d "~/.aws" ]; then
+      mkdir ~/.aws
+      echo -n "$AWS_CREDENTIALS" > ~/.aws/credentials
+    fi
+    # there is no difference between internal and external
+    # when we are dealing with anything other than KinD
+    cp ${K8S_CFG_INTERNAL} ${K8S_CFG_EXTERNAL}
+    kubectl get ns >/dev/null
+  else
+    cp ${K8S_CFG_INTERNAL} ${K8S_CFG_EXTERNAL}
+    kubectl get ns >/dev/null
   fi
-  kubectl get ns >/dev/null
 }
 
 return_argo_initial_pass() {

@@ -1,7 +1,7 @@
 apiVersion: backstage.io/v1alpha1
 kind: Resource
 metadata:
-  name: hostcluster
+  name: hub
   annotations:
     kubernetes.io/api-server: https://kubernetes.default.svc
     kubernetes.io/api-server-certificate-authority: ''
