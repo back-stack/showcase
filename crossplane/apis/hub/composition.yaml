@@ -332,7 +332,7 @@ spec:
                     registry: ghcr.io
                     repository: back-stack/showcase-backstage
                     tag: latest
-                    pullPolicy: IfNotPresent
+                    pullPolicy: Always
                   extraEnvVarsSecrets:
                   - backstage
                   appConfig:
