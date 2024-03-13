@@ -36,7 +36,7 @@ deploy_backstack_hub() {
               registry: ghcr.io
               repository: back-stack/showcase-backstage
               tag: latest
-              pullPolicy: IfNotPresent
+              pullPolicy: Always
           argocd:
             host: ${ARGOCD_HOST}
           vault:
