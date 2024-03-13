@@ -8,7 +8,7 @@ spec:
     id: de-ohio-eks-backstage
     region: us-east-2
     iam:
-      roleArn: arn:aws:iam::723651357729:role/eksctl-de-eks-ohio-cluster-ServiceRole-OxBrvocK8k9F
+      roleArn: arn:aws:iam::723651357729:instance-profile/eks-40c6e5b1-505d-13cb-70c6-55e161a551c8
     version: "1.28"
     nodes:
       count: 3
