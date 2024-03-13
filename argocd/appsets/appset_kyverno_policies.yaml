@@ -13,7 +13,7 @@ spec:
     metadata:
       name: "{{name}}-kyverno-policies"
       annotations:
-        argocd.argoproj.io/sync-wave: "1"
+        argocd.argoproj.io/sync-wave: "-1"
     spec:
       project: "default"
       source:

@@ -141,7 +141,7 @@ spec:
                 apiVersion: argoproj.io/v1alpha1
                 kind: Application
                 metadata:
-                  name: clusters
+                  name: apps-from-hub
                   namespace: argocd
                 spec:
                   project: default
@@ -167,7 +167,7 @@ spec:
                 apiVersion: argoproj.io/v1alpha1
                 kind: Application
                 metadata:
-                  name: clusters
+                  name: clusters-from-hub
                   namespace: argocd
                 spec:
                   project: default
