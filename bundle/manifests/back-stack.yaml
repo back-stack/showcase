@@ -5,3 +5,5 @@ metadata:
 spec: 
   package: ghcr.io/kroy76/showcase-configuration:latest
   skipDependencyResolution: true
+  packagePullPolicy: Always
+

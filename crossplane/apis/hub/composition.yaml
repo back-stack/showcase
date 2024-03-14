@@ -141,7 +141,7 @@ spec:
                 apiVersion: argoproj.io/v1alpha1
                 kind: Application
                 metadata:
-                  name: clusters
+                  name: apps-from-hub
                   namespace: argocd
                 spec:
                   project: default
@@ -167,7 +167,7 @@ spec:
                 apiVersion: argoproj.io/v1alpha1
                 kind: Application
                 metadata:
-                  name: clusters
+                  name: clusters-from-hub
                   namespace: argocd
                 spec:
                   project: default
@@ -299,7 +299,7 @@ spec:
                   name: hub
                   namespace: argocd
                 data:
-                  name: aHViCg== # hub
+                  name: aHVi # hub
                   server: aHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3Zj # https://kubernetes.default.svc
                   config: eyJ0bHNDbGllbnRDb25maWciOnsiaW5zZWN1cmUiOmZhbHNlfX0= #'{"tlsClientConfig":{"insecure":false}}'
         patches:
@@ -332,7 +332,7 @@ spec:
                     registry: ghcr.io
                     repository: kroy76/showcase-backstage
                     tag: latest
-                    pullPolicy: IfNotPresent
+                    pullPolicy: Always
                   extraEnvVarsSecrets:
                   - backstage
                   appConfig:
