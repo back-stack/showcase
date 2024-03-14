@@ -166,6 +166,11 @@ install:
       arguments:
         - deploy_secrets
   - exec:
+      description: "Restart Crossplane ESS Vault Plugin"
+      command: ./helpers.sh
+      arguments:
+        - restart_pod crossplane-system ess-plugin-vault
+  - exec:
       description: "Grab ArgoCD Initial Password"
       command: ./helpers.sh
       arguments:

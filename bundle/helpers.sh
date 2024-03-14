@@ -139,7 +139,7 @@ ensure_kubernetes() {
 }
 
 restart_pod() {
-  echo kubectl rollout restart deployment $1 -n $2
+  echo kubectl rollout restart deployment $2 -n $1
 }
 
 return_argo_initial_pass() {
