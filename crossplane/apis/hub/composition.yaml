@@ -299,7 +299,7 @@ spec:
                   name: hub
                   namespace: argocd
                 data:
-                  name: aHViCg== # hub
+                  name: aHVi # hub
                   server: aHR0cHM6Ly9rdWJlcm5ldGVzLmRlZmF1bHQuc3Zj # https://kubernetes.default.svc
                   config: eyJ0bHNDbGllbnRDb25maWciOnsiaW5zZWN1cmUiOmZhbHNlfX0= #'{"tlsClientConfig":{"insecure":false}}'
         patches:
