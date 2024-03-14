@@ -3,6 +3,7 @@ kind: Configuration
 metadata: 
   name: back-stack
 spec: 
-  package: ghcr.io/back-stack/showcase-configuration:latest
+  package: ghcr.io/kroy76/showcase-configuration:latest
   skipDependencyResolution: true
   packagePullPolicy: Always
+

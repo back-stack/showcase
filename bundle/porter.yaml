@@ -1,6 +1,6 @@
 schemaType: Bundle
 schemaVersion: 1.0.1
-registry: "ghcr.io/back-stack"
+registry: "ghcr.io/kroy76"
 name: showcase-bundle
 description: "The BACK stack showcase bundle"
 
@@ -44,7 +44,7 @@ parameters:
   - name: repository
     env: REPOSITORY
     type: string
-    default: https://github.com/back-stack/showcase
+    default: https://github.com/kroy76/showcase
   - name: backstage-host
     env: BACKSTAGE_HOST
     type: string
