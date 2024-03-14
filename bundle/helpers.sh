@@ -138,6 +138,10 @@ ensure_kubernetes() {
   fi
 }
 
+restart_pod() {
+  echo kubectl rollout restart deployment $1 -n $2
+}
+
 return_argo_initial_pass() {
   while ! kubectl -n argocd get secret argocd-initial-admin-secret &>/dev/null; do sleep 1; done
   kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d >~/argo_initial_passwd
