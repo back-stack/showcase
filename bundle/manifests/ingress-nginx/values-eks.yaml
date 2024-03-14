@@ -13,4 +13,3 @@ controller:
       service.beta.kubernetes.io/aws-load-balancer-healthcheck-path: /healthz
       service.beta.kubernetes.io/aws-load-balancer-healthcheck-port: 10254
       service.beta.kubernetes.io/aws-load-balancer-internal: "true"
-      service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:us-east-2:723651357729:certificate/2a538ca9-ca37-472e-8756-b3c5c73d212c"
