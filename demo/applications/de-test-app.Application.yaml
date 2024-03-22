@@ -6,8 +6,8 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/argoproj/argocd-example-apps.git
-    path: guestbook/guestbook-ui-deployment.yaml
+    repoURL: https://github.com/argoproj/argocd-example-apps
+    path: /guestbook/guestbook-ui-deployment.yaml
     targetRevision: HEAD
   destination: 
     name: hub
