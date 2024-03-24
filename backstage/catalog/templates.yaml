@@ -8,3 +8,4 @@ spec:
     - ./templates/cluster/eks/template.yaml
     - ./templates/cluster/aks/template.yaml
     - ./templates/application/template.yaml
+    - ./templates/cluster/eks/templateLab.yaml
