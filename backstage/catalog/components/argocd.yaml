@@ -6,7 +6,7 @@ metadata:
   name: argocd
   description: Gitops Platform
   links:
-    - url: https://argocd-7f000001.nip.io
+    - url: https://argocd.backstack.de.ltim.net
       title: ArgoCD Dashboard
       icon: dashboard
 spec:

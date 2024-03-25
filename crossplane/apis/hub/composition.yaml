@@ -330,7 +330,7 @@ spec:
                 backstage:
                   image:
                     registry: ghcr.io
-                    repository: back-stack/showcase-backstage
+                    repository: kroy76/showcase-backstage
                     tag: latest
                     pullPolicy: Always
                   extraEnvVarsSecrets:

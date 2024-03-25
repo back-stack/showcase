@@ -1,0 +1,21 @@
+apiVersion: backstack.dev/v1alpha1
+kind: EKSCluster
+metadata:
+  name: de-eks-backstage
+  namespace: default
+spec:
+  parameters:
+    id: de-eks-backstage
+    region: us-east-1
+    iam:
+      roleArn: arn:aws:iam::723651357729:role/eksctl-de-eks-backstack-cluster-ServiceRole-ydpDaxXVEZ8u
+    version: "1.28"
+    nodes:
+      count: 3
+      instanceType: t3.small
+  writeConnectionSecretToRef:
+    name: de-eks-backstage-kubeconfig
+  publishConnectionDetailsTo:
+    name: de-eks-backstage/de-eks-backstage-kubeconfig
+    configRef:
+      name: vault

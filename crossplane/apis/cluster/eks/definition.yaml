@@ -48,6 +48,7 @@ spec:
                     description: NetworkSelector employs a specific type of network architecture.
                     enum:
                     - basic
+                    - delab
                     default: basic
                   version:
                     type: string

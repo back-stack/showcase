@@ -146,5 +146,5 @@ jobs:
 
       - name: Publish Porter bundle
         run: |
-          porter publish --dir bundle --registry ${{ env.REGISTRY }}/back-stack
-          porter publish --dir bundle --registry ${{ env.REGISTRY }}/back-stack --tag latest --force
+          porter publish --dir bundle --registry ${{ env.REGISTRY }}/${{ github.repository_owner }}
+          porter publish --dir bundle --registry ${{ env.REGISTRY }}/${{ github.repository_owner }} --tag latest --force
