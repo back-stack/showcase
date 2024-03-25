@@ -1,7 +1,7 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: eks
+  name: deks
   title: New Cluster (EKS) in Lab
   description: Request an EKS Cluster to host workloads in DE Lab
   tags:
