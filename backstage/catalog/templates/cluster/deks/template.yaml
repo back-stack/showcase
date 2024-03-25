@@ -76,13 +76,13 @@ spec:
         pull_request_branch_name:
           title: Branch name for Pull Request
           type: string
-          default: new-cluster-request
+          default: new-de-cluster-request
   steps:
     - id: template
       name: Fetch cluster claim template
       action: fetch:template
       input:
-        url: ./skeletonLab
+        url: ./skeleton
         targetPath: demo/clusters
         values:
           cluster_id: ${{ parameters.cluster_id }}
