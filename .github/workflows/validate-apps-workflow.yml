@@ -17,7 +17,7 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Checkout template
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Install Kyverno CLI
         uses: kyverno/action-install-cli@v0.2.0
