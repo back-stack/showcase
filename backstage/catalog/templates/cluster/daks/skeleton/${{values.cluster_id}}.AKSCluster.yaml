@@ -1,5 +1,5 @@
 apiVersion: backstack.dev/v1alpha1
-kind: DEKSCluster
+kind: DAKSCluster
 metadata:
   name: ${{ values.cluster_id }}
   namespace: default
@@ -7,10 +7,8 @@ spec:
   parameters:
     id: ${{ values.cluster_id }}
     region: ${{ values.region }}
-    subnets: ${{ values.subnets }}
-    iam:
-      roleArn: ${{ values.iam_role_arn}}
-    version: "${{ values.version }}"
+    resource_group: ${{ values.resource_group }}
+    version: ${{ values.version }}
     nodes:
       count: ${{ values.nodes_count }}
       instanceType: ${{ values.nodes_instance_type }}

@@ -9,3 +9,4 @@ spec:
     - ./templates/cluster/aks/template.yaml
     - ./templates/application/template.yaml
     - ./templates/cluster/deks/template.yaml
+    - ./templates/cluster/daks/template.yaml

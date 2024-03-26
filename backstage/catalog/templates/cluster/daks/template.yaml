@@ -1,12 +1,12 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: deks
-  title: New Cluster (EKS) in DE Lab
-  description: Request an EKS Cluster to host workloads in DE Lab
+  name: daks
+  title: New Cluster (AKS) in DE Lab
+  description: Request an AKS Cluster to host workloads in DE Lab
   tags:
     - caas
-    - eks
+    - aks
     - de-lab
 spec:
   owner: infrastructure
@@ -16,7 +16,7 @@ spec:
       required:
         - cluster_id
         - region
-        - subnets
+        - resource_group
       properties:
         cluster_id:
           title: Cluster ID
@@ -26,28 +26,19 @@ spec:
           title: Region
           type: string
           description: Region is the region you'd like your resource to be created in.
-        subnets:
-          title: Subnets
-          type: array
-          items: 
-            type: string
-          description: Subnets is the region you'd like your resource to be created in.
-        iam_role_arn:
-          title: IAM Role ARN
+        resource_group:
+          title: Resource Group
           type: string
-          description: The IAM Role ARN to connect as ClusterAdmin.
+          description: Resource Group is the region you'd like your resource to be created in.
         version:
           title: Version
           type: string
           description: Kubernetes version of the Cluster
-          default: "1.28"
+          default: "1.27.3"
           enum:
-            - "1.29"
-            - "1.28"
-            - "1.27"
-            - "1.26"
-            - "1.25"
-            - "1.24"
+            - "1.27.3"
+            - "1.26.6"
+            - "1.25.11"
         nodes_count:
           title: Node Group Size
           type: integer
@@ -57,7 +48,7 @@ spec:
           title: Node Instance Type
           type: string
           description: Instance type associated with the Node Group.
-          default: t3.small
+          default: Standard_B2s
         custom_kyverno_policies:
           title: Custom Policy Repository Location
           type: string
@@ -76,9 +67,9 @@ spec:
         pull_request_branch_name:
           title: Branch name for Pull Request
           type: string
-          default: new-de-cluster-request
+          default: new-cluster-request
   steps:
-    - id: template
+    - id: template-cluster
       name: Fetch cluster claim template
       action: fetch:template
       input:
@@ -87,9 +78,8 @@ spec:
         values:
           cluster_id: ${{ parameters.cluster_id }}
           region: ${{ parameters.region }}
-          subnets: ${{ parameters.subnets }}
+          resource_group: ${{ parameters.resource_group }}
           version: ${{ parameters.version }}
-          iam_role_arn: ${{ parameters.iam_role_arn }}
           nodes_count: ${{ parameters.nodes_count }}
           nodes_instance_type: ${{ parameters.nodes_instance_type }}
     - id: publish
@@ -97,13 +87,13 @@ spec:
       action: publish:github:pull-request
       input:
         allowedHosts: ['github.com']
-        title: Request for new DE Lab cluster
+        title: Request for new DE Lab AKS cluster
         description: |
-          Cluster ID: ${{ parameters.cluster_id }}
-          Region:     ${{ parameters.region }}
-          Subnets:    ${{ parameters.subnets }}
-          Version:    ${{ parameters.version }}
-          Nodes:      ${{ parameters.nodes_instance_type }} (${{ parameters.nodes_count }})
+          Cluster ID:     ${{ parameters.cluster_id }}
+          Region:         ${{ parameters.region }}
+          Resource Group: ${{ parameters.resource_group }}
+          Version:        ${{ parameters.version }}
+          Nodes:          ${{ parameters.nodes_instance_type }} (${{ parameters.nodes_count }})
         repoUrl: ${{ parameters.repo_url }}
         branchName: ${{ parameters.pull_request_branch_name }}
   output:
