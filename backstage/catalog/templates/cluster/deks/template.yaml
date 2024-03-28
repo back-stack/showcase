@@ -26,6 +26,14 @@ spec:
           title: Region
           type: string
           description: Region is the region you'd like your resource to be created in.
+        network_type:
+          title: Network Type
+          type: string
+          description: The type of network detault or existing subnets.
+          default: "delab"
+          enum: 
+            - "basic"
+            - "delab"
         subnets:
           title: Subnets
           type: array
@@ -87,6 +95,7 @@ spec:
         values:
           cluster_id: ${{ parameters.cluster_id }}
           region: ${{ parameters.region }}
+          network_type: ${{ parameters.network_type }}
           subnets: ${{ parameters.subnets }}
           version: ${{ parameters.version }}
           iam_role_arn: ${{ parameters.iam_role_arn }}
