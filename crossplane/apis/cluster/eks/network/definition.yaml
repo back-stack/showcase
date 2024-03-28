@@ -27,6 +27,11 @@ spec:
                     region:
                       type: string
                       description: Region is the region you'd like your resource to be created in.
+                    subnets:
+                      type: array
+                      items:
+                        type: string
+                      description: Subnets is the region you'd like your resource to be created in.
                   required:
                   - id
                   - region
