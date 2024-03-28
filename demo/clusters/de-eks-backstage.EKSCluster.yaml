@@ -1,5 +1,5 @@
 apiVersion: backstack.dev/v1alpha1
-kind: DEKSCluster
+kind: EKSCluster
 metadata:
   name: de-eks-backstage
   namespace: default
