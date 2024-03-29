@@ -1,0 +1,24 @@
+apiVersion: backstack.dev/v1alpha1
+kind: EKSCluster
+metadata:
+  name: de-eks-workload-bs
+  namespace: default
+spec:
+  parameters:
+    id: de-eks-workload-bs
+    region: us-east-1
+    networkSelector: delab
+    vpcId: vpc-0bdb33832be87c484
+    subnets: subnet-0d3ded903f677fe41,subnet-02d546eaa79147337,subnet-0df2d960f01046921,subnet-0898706bfc897da87
+    iam:
+      roleArn: 
+    version: "1.28"
+    nodes:
+      count: 3
+      instanceType: t3.small
+  writeConnectionSecretToRef:
+    name: de-eks-workload-bs-kubeconfig
+  publishConnectionDetailsTo:
+    name: de-eks-workload-bs/de-eks-workload-bs-kubeconfig
+    configRef:
+      name: vault
