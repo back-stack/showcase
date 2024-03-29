@@ -9,7 +9,11 @@ spec:
     region: us-east-1
     networkSelector: delab
     vpcId: vpc-0bdb33832be87c484
-    subnets: subnet-0d3ded903f677fe41,subnet-02d546eaa79147337,subnet-0df2d960f01046921,subnet-0898706bfc897da87
+    subnets: 
+      - subnet-0d3ded903f677fe41
+      - subnet-02d546eaa79147337
+      - subnet-0df2d960f01046921
+      - subnet-0898706bfc897da87
     iam:
       roleArn: 
     version: "1.28"
