@@ -16,6 +16,7 @@ spec:
       required:
         - cluster_id
         - region
+        - vpcId
         - subnets
       properties:
         cluster_id:
@@ -34,6 +35,10 @@ spec:
           enum: 
             - "basic"
             - "delab"
+        vpcId:
+          title: VPC Id
+          type: string
+          description: VPC is the region you'd like your resource to be created in.
         subnets:
           title: Subnets
           type: array
@@ -96,6 +101,7 @@ spec:
           cluster_id: ${{ parameters.cluster_id }}
           region: ${{ parameters.region }}
           network_type: ${{ parameters.network_type }}
+          vpcId: ${{ parameters.vpcId }}
           subnets: ${{ parameters.subnets }}
           version: ${{ parameters.version }}
           iam_role_arn: ${{ parameters.iam_role_arn }}
@@ -110,6 +116,7 @@ spec:
         description: |
           Cluster ID: ${{ parameters.cluster_id }}
           Region:     ${{ parameters.region }}
+          VPC:        ${{ parameters.vpcId }}
           Subnets:    ${{ parameters.subnets }}
           Version:    ${{ parameters.version }}
           Nodes:      ${{ parameters.nodes_instance_type }} (${{ parameters.nodes_count }})

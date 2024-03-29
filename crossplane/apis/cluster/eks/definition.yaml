@@ -36,6 +36,9 @@ spec:
                   region:
                     type: string
                     description: Region is the region you'd like your resource to be created in.
+                  vpcId:
+                    type: string
+                    description: VPC is the region you'd like your resource to be created in.
                   subnets:
                     type: array
                     items:

@@ -18,6 +18,8 @@ spec:
           toFieldPath: spec.parameters.id
         - fromFieldPath: spec.parameters.region
           toFieldPath: spec.parameters.region
+        - fromFieldPath: spec.parameters.vpcId
+          toFieldPath: spec.parameters.vpcId
         - fromFieldPath: spec.parameters.subnets
           toFieldPath: spec.parameters.subnets
         - fromFieldPath: spec.parameters.networkSelector

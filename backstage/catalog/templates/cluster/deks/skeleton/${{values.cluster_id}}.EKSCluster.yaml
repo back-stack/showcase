@@ -8,6 +8,7 @@ spec:
     id: ${{ values.cluster_id }}
     region: ${{ values.region }}
     networkSelector: ${{ values.network_type }}
+    vpcId: ${{ values.vpcId }}
     subnets: ${{ values.subnets }}
     iam:
       roleArn: ${{ values.iam_role_arn}}
