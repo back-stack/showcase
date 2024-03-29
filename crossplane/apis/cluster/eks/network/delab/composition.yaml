@@ -33,3 +33,7 @@ spec:
         metadata:
           annotations:
             crossplane.io/external-name: spec.parameters.vpcId
+        spec:
+          managementPolicies: ["Observe"]
+          forProvider:
+            region: spec.parameters.region
