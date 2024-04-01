@@ -1,0 +1,25 @@
+apiVersion: backstack.dev/v1alpha1
+kind: EKSCluster
+metadata:
+  name: de-eks-workload-bs-ohio
+  namespace: default
+spec:
+  parameters:
+    id: de-eks-workload-bs-ohio
+    region: us-east-1
+    networkSelector: delab
+    vpcId: vpc-0bdb33832be87c484
+    subnets: [ subnet-0d3ded903f677fe41,subnet-02d546eaa79147337,subnet-0df2d960f01046921,subnet-0898706bfc897da87 ]
+    spec.compositionSelector.matchLabels[type] : delab
+    iam:
+      roleArn: arn:aws:iam::723651357729:role/eksctl-de-eks-backstack-cluster-ServiceRole-ydpDaxXVEZ8u
+    version: "1.28"
+    nodes:
+      count: 3
+      instanceType: t3.small
+  writeConnectionSecretToRef:
+    name: de-eks-workload-bs-ohio-kubeconfig
+  publishConnectionDetailsTo:
+    name: de-eks-workload-bs-ohio/de-eks-workload-bs-ohio-kubeconfig
+    configRef:
+      name: vault
