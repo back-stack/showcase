@@ -9,7 +9,8 @@ spec:
     region: ${{ values.region }}
     networkSelector: ${{ values.network_type }}
     vpcId: ${{ values.vpcId }}
-    subnets: ${{ values.subnets }}
+    subnets: [ ${{ values.subnets }} ]
+    spec.compositionSelector.matchLabels[type] : ${{ values.network_type }}
     iam:
       roleArn: ${{ values.iam_role_arn}}
     version: "${{ values.version }}"
