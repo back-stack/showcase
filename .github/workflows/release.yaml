@@ -36,7 +36,7 @@ jobs:
         id: tag
 
       - name: Log into ${{ env.REGISTRY }}
-        uses: docker/login-action@v3.0.0
+        uses: docker/login-action@v3.1.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
@@ -78,26 +78,26 @@ jobs:
           node-version: 18.x
 
       - name: Log in to the Container registry
-        uses: docker/login-action@v3.0.0
+        uses: docker/login-action@v3.1.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run yarn install
-        uses: borales/actions-yarn@v4
+        uses: borales/actions-yarn@v5
         with:
           dir: backstage
           cmd: install
 
       - name: Build backend bundle
-        uses: borales/actions-yarn@v4
+        uses: borales/actions-yarn@v5
         with:
           dir: backstage
           cmd: build:backend
 
       - name: Build the image
-        uses: borales/actions-yarn@v4
+        uses: borales/actions-yarn@v5
         with:
           dir: backstage
           cmd: build-image --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backstage:${{ steps.tag.outputs.VERSION_TAG }} --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backstage:latest
@@ -125,7 +125,7 @@ jobs:
         id: tag
 
       - name: Log in to the Container registry
-        uses: docker/login-action@v3.0.0
+        uses: docker/login-action@v3.1.0
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
