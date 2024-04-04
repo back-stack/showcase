@@ -34,6 +34,7 @@ spec:
                     description: Kubernetes version
                     type: string
                     enum:
+                    - "1.28.5"
                     - "1.27.3"
                     - "1.26.6"
                     - "1.25.11"
