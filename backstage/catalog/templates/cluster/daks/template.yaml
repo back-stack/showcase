@@ -17,6 +17,7 @@ spec:
         - cluster_id
         - region
         - resource_group
+        - subnet
       properties:
         cluster_id:
           title: Cluster ID
@@ -30,6 +31,14 @@ spec:
           title: Resource Group
           type: string
           description: Resource Group is the region you'd like your resource to be created in.
+        vnet:
+          title: VNet
+          type: string
+          description: VNet is the region you'd like your resource to be created in.
+        subnet:
+          title: Subnet
+          type: string
+          description: Subnet is the region you'd like your resource to be created in.
         version:
           title: Version
           type: string
@@ -79,6 +88,8 @@ spec:
           cluster_id: ${{ parameters.cluster_id }}
           region: ${{ parameters.region }}
           resource_group: ${{ parameters.resource_group }}
+          vnet: ${{ parameters.vnet }}
+          subnet: ${{ parameters.subnet }}
           version: ${{ parameters.version }}
           nodes_count: ${{ parameters.nodes_count }}
           nodes_instance_type: ${{ parameters.nodes_instance_type }}
@@ -92,6 +103,8 @@ spec:
           Cluster ID:     ${{ parameters.cluster_id }}
           Region:         ${{ parameters.region }}
           Resource Group: ${{ parameters.resource_group }}
+          VNet: ${{ parameters.vnet }}
+          Subnet: ${{ parameters.subnet }}
           Version:        ${{ parameters.version }}
           Nodes:          ${{ parameters.nodes_instance_type }} (${{ parameters.nodes_count }})
         repoUrl: ${{ parameters.repo_url }}

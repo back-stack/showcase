@@ -30,6 +30,15 @@ spec:
                   region:
                     type: string
                     description: Region is the region you'd like your resource to be created in.
+                  resourceGroup:
+                    type: string
+                    description: Resource Group is the region you'd like your resource to be created in.
+                  vnet:
+                    type: string
+                    description: VNet is the region you'd like your resource to be created in.
+                  subnet:
+                    type: string
+                    description: Subnet is the region you'd like your resource to be created in.
                   version:
                     description: Kubernetes version
                     type: string

@@ -41,7 +41,17 @@ spec:
                     description: NetworkSelector employs a specific type of network architecture.
                     enum:
                     - basic
+                    - delab
                     default: basic
+                  resourceGroup:
+                    type: string
+                    description: Resource Group is the region you'd like your resource to be created in.
+                  vnet:
+                    type: string
+                    description: VNet is the region you'd like your resource to be created in.
+                  subnet:
+                    type: string
+                    description: Subnet is the region you'd like your resource to be created in.
                   version:
                     type: string
                     description: Kubernetes version of the Cluster

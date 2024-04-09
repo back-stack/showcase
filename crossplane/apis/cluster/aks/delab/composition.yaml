@@ -2,6 +2,9 @@ apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
   name: xaksclusters.backstack.dev
+  labels:
+    provider: azure
+    type: delab
 spec:
   writeConnectionSecretsToNamespace: crossplane-system
   publishConnectionDetailsWithStoreConfigRef:
@@ -10,17 +13,6 @@ spec:
     apiVersion: backstack.dev/v1alpha1
     kind: XAKSCluster
   resources:
-    - name: network
-      base:
-        apiVersion: azure.backstack.dev/v1alpha1
-        kind: XNetwork
-      patches:
-        - fromFieldPath: spec.parameters.id
-          toFieldPath: spec.parameters.id
-        - fromFieldPath: spec.parameters.region
-          toFieldPath: spec.parameters.region
-        - fromFieldPath: spec.parameters.networkSelector
-          toFieldPath: spec.compositionSelector.matchLabels[type]
     - name: cluster
       base:
         apiVersion: azure.backstack.dev/v1alpha1
@@ -46,3 +38,11 @@ spec:
           toFieldPath: spec.parameters.nodes.count
         - fromFieldPath: spec.parameters.nodes.instanceType
           toFieldPath: spec.parameters.nodes.instanceType
+        - fromFieldPath: spec.parameters.networkSelector
+          toFieldPath: spec.compositionSelector.matchLabels[type]
+        - fromFieldPath: spec.parameters.resourceGroup
+          toFieldPath: spec.parameters.resourceGroup
+        - fromFieldPath: spec.parameters.vnet
+          toFieldPath: spec.parameters.vnet
+        - fromFieldPath: spec.parameters.subnet
+          toFieldPath: spec.parameters.subnet

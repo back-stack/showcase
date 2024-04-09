@@ -7,7 +7,11 @@ spec:
   parameters:
     id: ${{ values.cluster_id }}
     region: ${{ values.region }}
-    resource_group: ${{ values.resource_group }}
+    networkSelector: delab
+    spec.compositionSelector.matchLabels[type] : delab
+    resourceGroup: ${{ values.resource_group }}
+    vnet: ${{ values.vnet }}
+    subnet: ${{ values.subnet }}
     version: ${{ values.version }}
     nodes:
       count: ${{ values.nodes_count }}

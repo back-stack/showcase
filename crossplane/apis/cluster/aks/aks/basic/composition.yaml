@@ -4,6 +4,7 @@ metadata:
   name: xaks.azure.backstack.dev
   labels:
     provider: azure
+    type: basic
 spec:
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
