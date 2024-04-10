@@ -1,0 +1,24 @@
+apiVersion: backstack.dev/v1alpha1
+kind: DAKSCluster
+metadata:
+  name: de-backstage-aks
+  namespace: default
+spec:
+  parameters:
+    id: de-backstage-aks
+    region: us-east
+    networkSelector: delab
+    spec.compositionSelector.matchLabels[type] : delab
+    resourceGroup: IDP_Dev
+    vnet: backstack-vnet
+    subnet: backstack-subnet-1
+    version: 1.27.3
+    nodes:
+      count: 3
+      instanceType: Standard_B2s
+  writeConnectionSecretToRef:
+    name: de-backstage-aks-kubeconfig
+  publishConnectionDetailsTo:
+    name: de-backstage-aks/de-backstage-aks-kubeconfig
+    configRef:
+      name: vault
