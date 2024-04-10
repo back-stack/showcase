@@ -1,5 +1,5 @@
 apiVersion: backstack.dev/v1alpha1
-kind: DAKSCluster
+kind: AKSCluster
 metadata:
   name: de-backstage-aks
   namespace: default
