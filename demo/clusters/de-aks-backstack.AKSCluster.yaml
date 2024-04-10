@@ -6,7 +6,7 @@ metadata:
 spec:
   parameters:
     id: de-aks-backstack
-    region: us-east
+    region: "East US"
     version: 1.27.3
     nodes:
       count: 3

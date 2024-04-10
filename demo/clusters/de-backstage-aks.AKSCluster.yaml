@@ -6,7 +6,7 @@ metadata:
 spec:
   parameters:
     id: de-backstage-aks
-    region: us-east
+    region: "East US"
     networkSelector: delab
     spec.compositionSelector.matchLabels[type] : delab
     resourceGroup: IDP_Dev
