@@ -11,7 +11,7 @@ spec:
     spec.compositionSelector.matchLabels[type] : delab
     resourceGroup: IDP_Dev
     vnet: backstack-vnet
-    subnet: backstack-subnet-1
+    subnet: /subscriptions/dbc53267-e13a-403c-9a0d-976e4f04debe/resourceGroups/IDP_Dev/providers/Microsoft.Network/virtualNetworks/backstack-vnet/subnets/backstack-subnet-1
     version: 1.27.3
     nodes:
       count: 3
