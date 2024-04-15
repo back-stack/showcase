@@ -1,5 +1,5 @@
 apiVersion: backstack.dev/v1alpha1
-kind: EKSCluster
+kind: DEKSCluster
 metadata:
   name: ${{ values.cluster_id }}
   namespace: default
