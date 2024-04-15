@@ -5,8 +5,8 @@ metadata:
 spec:
   group: backstack.dev
   names:
-    kind: DXEKSCluster
-    plural: dxeksclusters
+    kind: XEKSCluster
+    plural: xeksclusters
   claimNames:
     kind: DEKSCluster
     plural: deksclusters
