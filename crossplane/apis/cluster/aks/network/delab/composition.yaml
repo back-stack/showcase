@@ -4,7 +4,7 @@ metadata:
   name: xnetworks.azure.backstack.dev
   labels:
     provider: azure
-    type: basic
+    type: delab
 spec:
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
@@ -22,26 +22,13 @@ spec:
       fromFieldPath: spec.parameters.region
       toFieldPath: spec.forProvider.location
   resources:
-  - name: resource-group
-    base:
-      apiVersion: azure.upbound.io/v1beta1
-      kind: ResourceGroup
-    patches:
-    - type: PatchSet
-      patchSetName: network-id
-    - type: PatchSet
-      patchSetName: region
-    - type: ToCompositeFieldPath
-      fromFieldPath: status.id
-      toFieldPath: status.resourceGroup
   - name: virtual-network
     base:
       apiVersion: network.azure.upbound.io/v1beta1
       kind: VirtualNetwork
       spec:
         forProvider:
-          resourceGroupNameSelector:
-            matchControllerRef: true
+          resourceGroupName: spec.parameters.resourceGroup
           addressSpace:
           - 192.168.0.0/16
     patches:
@@ -62,14 +49,16 @@ spec:
       - type: string
         string:
           fmt: "%s-vnet"
+    - type: ToCompositeFieldPath
+      fromFieldPath: spec.parameters.resourceGroup
+      toFieldPath: status.resourceGroup
   - name: subnet
     base:
       apiVersion: network.azure.upbound.io/v1beta1
       kind: Subnet
       spec:
         forProvider:
-          resourceGroupNameSelector:
-            matchControllerRef: true
+          resourceGroupName: spec.parameters.resourceGroup
           virtualNetworkNameSelector:
             matchControllerRef: true
           addressPrefixes:

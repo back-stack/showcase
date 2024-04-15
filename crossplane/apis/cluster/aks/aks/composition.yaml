@@ -4,7 +4,6 @@ metadata:
   name: xaks.azure.backstack.dev
   labels:
     provider: azure
-    type: basic
 spec:
   writeConnectionSecretsToNamespace: crossplane-system
   compositeTypeRef:
@@ -38,10 +37,10 @@ spec:
       - type: string
         string:
           fmt: "%s-aks"
-    - fromFieldPath: spec.parameters.id
-      toFieldPath: spec.forProvider.resourceGroupNameSelector.matchLabels[azure.caas.upbound.io/network-id]
-    - fromFieldPath: spec.parameters.id
-      toFieldPath: spec.forProvider.defaultNodePool[0].vnetSubnetIdSelector.matchLabels[azure.caas.upbound.io/network-id]
+    - fromFieldPath: spec.parameters.resourceGroup
+      toFieldPath: spec.forProvider.resourceGroupName
+    - fromFieldPath: spec.parameters.subnet
+      toFieldPath: spec.forProvider.defaultNodePool[0].vnetSubnetId
     - fromFieldPath: spec.parameters.id
       toFieldPath: spec.forProvider.dnsPrefix
     - fromFieldPath: spec.parameters.nodes.instanceType

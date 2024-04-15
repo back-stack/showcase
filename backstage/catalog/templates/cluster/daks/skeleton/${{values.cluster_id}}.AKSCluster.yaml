@@ -8,7 +8,6 @@ spec:
     id: ${{ values.cluster_id }}
     region: ${{ values.region }}
     networkSelector: delab
-    spec.compositionSelector.matchLabels[type] : delab
     resourceGroup: ${{ values.resource_group }}
     vnet: ${{ values.vnet }}
     subnet: ${{ values.subnet }}

@@ -17,7 +17,6 @@ spec:
         - cluster_id
         - region
         - resource_group
-        - subnet
       properties:
         cluster_id:
           title: Cluster ID
