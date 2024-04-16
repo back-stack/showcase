@@ -12,19 +12,6 @@ spec:
     apiVersion: backstack.dev/v1alpha1
     kind: XAKSCluster
   resources:
-    - name: network
-      base:
-        apiVersion: azure.backstack.dev/v1alpha1
-        kind: XNetwork
-      patches:
-        - fromFieldPath: spec.parameters.id
-          toFieldPath: spec.parameters.id
-        - fromFieldPath: spec.parameters.region
-          toFieldPath: spec.parameters.region
-        - fromFieldPath: spec.parameters.networkSelector
-          toFieldPath: spec.compositionSelector.matchLabels[type]
-        - fromFieldPath: spec.parameters.resourceGroup
-          toFieldPath: spec.parameters.resourceGroup
     - name: cluster
       base:
         apiVersion: azure.backstack.dev/v1alpha1
@@ -50,9 +37,9 @@ spec:
           toFieldPath: spec.parameters.nodes.count
         - fromFieldPath: spec.parameters.nodes.instanceType
           toFieldPath: spec.parameters.nodes.instanceType
-        - fromFieldPath: status.resourceGroup
+        - fromFieldPath: spec.parameters.resourceGroup
           toFieldPath: spec.parameters.resourceGroup
-        - fromFieldPath: status.vnet
+        - fromFieldPath: spec.parameters.vnet
           toFieldPath: spec.parameters.vnet
-        - fromFieldPath: status.subnet
+        - fromFieldPath: spec.parameters.subnet
           toFieldPath: spec.parameters.subnet

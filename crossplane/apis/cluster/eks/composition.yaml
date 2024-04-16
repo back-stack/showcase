@@ -2,9 +2,6 @@ apiVersion: apiextensions.crossplane.io/v1
 kind: Composition
 metadata:
   name: xeksclusters.backstack.dev
-  labels:
-    provider: aws
-    type: delab
 spec:
   writeConnectionSecretsToNamespace: crossplane-system
   publishConnectionDetailsWithStoreConfigRef:
@@ -13,6 +10,22 @@ spec:
     apiVersion: backstack.dev/v1alpha1
     kind: XEKSCluster
   resources:
+    - base:
+        apiVersion: aws.caas.upbound.io/v1alpha1
+        kind: XNetwork
+      patches:
+        - fromFieldPath: spec.parameters.id
+          toFieldPath: spec.parameters.id
+        - fromFieldPath: spec.parameters.region
+          toFieldPath: spec.parameters.region
+        - fromFieldPath: spec.parameters.networkSelector
+          toFieldPath: spec.compositionSelector.matchLabels[type]
+        - type: ToCompositeFieldPath
+          fromFieldPath: status.subnetIds
+          toFieldPath: status.subnetIds
+          policy:
+            fromFieldPath: Required
+      name: compositeNetworkEKS
     - base:
         apiVersion: aws.caas.upbound.io/v1alpha1
         kind: XEKS
@@ -42,7 +55,7 @@ spec:
           toFieldPath: spec.parameters.nodes.instanceType
         - fromFieldPath: spec.parameters.iam.roleArn
           toFieldPath: spec.parameters.iam.roleArn
-        - fromFieldPath: spec.parameters.subnets
-          toFieldPath: spec.parameters.subnets
+        - fromFieldPath: status.subnetIds
+          toFieldPath: spec.parameters.subnetIds
           policy:
             fromFieldPath: Required

@@ -69,7 +69,7 @@ spec:
       patches:
         - type: PatchSet
           patchSetName: region
-        - fromFieldPath: spec.parameters.subnets
+        - fromFieldPath: spec.parameters.subnetIds
           toFieldPath: spec.forProvider.vpcConfig[0].subnetIds
         - fromFieldPath: spec.parameters.version
           toFieldPath: spec.forProvider.version
