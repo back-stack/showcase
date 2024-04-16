@@ -12,22 +12,6 @@ spec:
   resources:
     - base:
         apiVersion: aws.caas.upbound.io/v1alpha1
-        kind: XNetwork
-      patches:
-        - fromFieldPath: spec.parameters.id
-          toFieldPath: spec.parameters.id
-        - fromFieldPath: spec.parameters.region
-          toFieldPath: spec.parameters.region
-        - fromFieldPath: spec.parameters.networkSelector
-          toFieldPath: spec.compositionSelector.matchLabels[type]
-        - type: ToCompositeFieldPath
-          fromFieldPath: status.subnetIds
-          toFieldPath: status.subnetIds
-          policy:
-            fromFieldPath: Required
-      name: compositeNetworkEKS
-    - base:
-        apiVersion: aws.caas.upbound.io/v1alpha1
         kind: XEKS
       connectionDetails:
         - fromConnectionSecretKey: kubeconfig
@@ -55,7 +39,7 @@ spec:
           toFieldPath: spec.parameters.nodes.instanceType
         - fromFieldPath: spec.parameters.iam.roleArn
           toFieldPath: spec.parameters.iam.roleArn
-        - fromFieldPath: status.subnetIds
+        - fromFieldPath: spec.parameters.subnets
           toFieldPath: spec.parameters.subnetIds
           policy:
             fromFieldPath: Required

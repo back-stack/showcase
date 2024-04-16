@@ -2,8 +2,8 @@ apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
   name: daks
-  title: New Cluster (AKS) in DE Lab
-  description: Request an AKS Cluster to host workloads in DE Lab
+  title: New Cluster (AKS) in Private Cloud (Lab)
+  description: Request an AKS Cluster to host workloads in Private Cloud (DE Lab)
   tags:
     - caas
     - aks
