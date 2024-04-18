@@ -210,7 +210,7 @@ spec:
                 role: nodegroup
             subnetIdSelector:
               matchLabels:
-                access: public
+                access: private
             scalingConfig:
               - minSize: 1
                 maxSize: 100
