@@ -208,9 +208,6 @@ spec:
               matchControllerRef: true
               matchLabels:
                 role: nodegroup
-            subnetIdSelector:
-              matchLabels:
-                access: private
             scalingConfig:
               - minSize: 1
                 maxSize: 100
@@ -225,8 +222,8 @@ spec:
           toFieldPath: spec.forProvider.scalingConfig[0].desiredSize
         - fromFieldPath: spec.parameters.nodes.instanceType
           toFieldPath: spec.forProvider.instanceTypes[0]
-        - fromFieldPath: spec.parameters.id
-          toFieldPath: spec.forProvider.subnetIdSelector.matchLabels[networks.aws.caas.upbound.io/network-id]
+        - fromFieldPath: spec.parameters.subnetIds
+          toFieldPath: spec.forProvider.subnetIds
     - base:
         apiVersion: eks.aws.upbound.io/v1beta1
         kind: Addon
